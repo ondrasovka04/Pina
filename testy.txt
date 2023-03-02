@@ -1,0 +1,3 @@
+npx expo export:web
+
+eas build --platform android --profile androidapk
