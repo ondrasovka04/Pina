@@ -39,7 +39,7 @@ const PrehledZapsanychProhreskuScreen = ({ navigation }) => {
     setIsLoading(true);
     fetch(
       "https://pina.trialhosting.cz/api/prehledZapsanychProhresku/getSezony.php?tym=" +
-        global.admin,
+      global.admin,
       {
         method: "GET",
         headers: {
@@ -62,9 +62,9 @@ const PrehledZapsanychProhreskuScreen = ({ navigation }) => {
 
         fetch(
           "https://pina.trialhosting.cz/api/prehledZapsanychProhresku/getHraci.php?tym=" +
-            global.admin +
-            "&sezona=" +
-            vybranaSezona,
+          global.admin +
+          "&sezona=" +
+          vybranaSezona,
           {
             method: "GET",
             headers: {
@@ -87,11 +87,11 @@ const PrehledZapsanychProhreskuScreen = ({ navigation }) => {
 
             fetch(
               "https://pina.trialhosting.cz/api/prehledZapsanychProhresku/getProhresky.php?hrac=" +
-                vybranyHrac +
-                "&tym=" +
-                global.admin +
-                "&sezona=" +
-                vybranaSezona,
+              vybranyHrac +
+              "&tym=" +
+              global.admin +
+              "&sezona=" +
+              vybranaSezona,
               {
                 method: "GET",
                 headers: {
@@ -128,7 +128,7 @@ const PrehledZapsanychProhreskuScreen = ({ navigation }) => {
   function deleteSezony(id) {
     fetch(
       "https://pina.trialhosting.cz/api/prehledZapsanychProhresku/deleteProhresek.php?id=" +
-        id,
+      id,
       {
         method: "GET",
         headers: {
@@ -213,33 +213,34 @@ const PrehledZapsanychProhreskuScreen = ({ navigation }) => {
               }}
             />
           </View>
-          <View style={[styles.DropDownPickerContainer, { zIndex: 19990}]}>
+          <View style={[styles.DropDownPickerContainer, { zIndex: 19990 }]}>
             <Text style={styles.DropDownPickerLable}>Hráč:</Text>
-            <ScrollView nestedScrollEnabled={true}>
-              <DropDownPicker
-                open={openHraci}
-                value={vybranyHrac}
-                items={hraci}
-                setOpen={setOpenHraci}
-                setValue={setVybranyHrac}
-                setItems={setHraci}
-                placeholder="Vyberte"
-                listMode="SCROLLVIEW"
-                style={{ width: 200, marginBottom: 10 }}
-                containerStyle={{
-                  width: 200,
-                  zIndex: 19900
-                }}
-                onSelectItem={() => {
-                  setUmelejUpdate(() => umelejUpdate + 1);
-                  setNothingToShow(false);
-                }}
-              />
-            </ScrollView>
+            <DropDownPicker
+              open={openHraci}
+              value={vybranyHrac}
+              items={hraci}
+              setOpen={setOpenHraci}
+              setValue={setVybranyHrac}
+              setItems={setHraci}
+              placeholder="Vyberte"
+              style={{ width: 200, marginBottom: 10 }}
+              containerStyle={{
+                width: 200,
+                height: 200,
+              }}
+              listMode="SCROLLVIEW"
+              scrollViewProps={{
+                nestedScrollEnabled: true,
+              }}
+              onSelectItem={() => {
+                setUmelejUpdate(() => umelejUpdate + 1);
+                setNothingToShow(false);
+              }}
+            />
           </View>
         </View>
 
-        <View style={{ display: nothingToShow ? "none" : "flex", zIndex: -11 }}>
+        <View style={{ display: nothingToShow ? "none" : "flex", zIndex: -11, transform: [{ translateY: -150 }] }}>
           <Table borderStyle={{ borderWidth: 2, borderColor: "transparent" }}>
             {Platform.OS == "web" ? (
               <Row
@@ -255,7 +256,7 @@ const PrehledZapsanychProhreskuScreen = ({ navigation }) => {
                 widthArr={[180, 140, Dimensions.get("screen").width - 180 - 90]}
               />
             )}
-            <ScrollView>
+            <ScrollView nestedScrollEnabled={true}>
               {tableData.map((rowData, index) => (
                 <Row
                   key={index}
@@ -297,7 +298,6 @@ const styles = StyleSheet.create({
   btn: { backgroundColor: "transparent", borderRadius: 2, borderColor: "#000" },
   greyContainer: {
     width: 320,
-    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 30,
