@@ -65,7 +65,7 @@ const PrehledScreen = () => {
   const [castkaDiv, setCastkaDiv] = useState(0);
   const [celkemDiv, setCelkemDiv] = useState(0);
   const [soucetDole, setSoucetDole] = useState(0);
-  const [vyskaHeadru, setVyskaHeadru] = useState([0]);
+  const [vyskaHeadru, setVyskaHeadru] = useState(0);
 
   useEffect(() => {
     var table = [];
@@ -153,6 +153,7 @@ const PrehledScreen = () => {
       var widths = [];
       var pocty = [];
       var castky = [];
+      var nejvetsiVyska = 0;
       for (let i = 0; i < response.length; i += 1) {
         var pole = response[i].nazev.split(" ");
         var novejNazev = "";
@@ -178,18 +179,9 @@ const PrehledScreen = () => {
           }
           widths.push(nejvetsiSirka * 12);
 
-          var vyska = novejNazev.split("\n").length * 40;
-          if (vyska > vyskaHeadru[0]) {
-            var test = [];
-            test.push(vyska);
-            setVyskaHeadru((old) => {
-              old.splice(0, old.length);
-              for (let i = 0; i < test.length; i++) {
-                old.push(test[i]);
-              }
-              return old;
-            });
-            setVyskaHeadru([...test]);
+          var vyska = novejNazev.split("\n").length * 32;
+          if (vyska > nejvetsiVyska) {
+            nejvetsiVyska = vyska;
           }
         }
         var b = false;
@@ -204,6 +196,8 @@ const PrehledScreen = () => {
           lidi.push(rowData);
         }
       }
+
+      setVyskaHeadru(nejvetsiVyska);
 
       lidi.push(["Součet"]);
       sloupce.push("Součet");
@@ -723,7 +717,7 @@ const PrehledScreen = () => {
         >
           <View
             style={{
-              height: vyskaHeadru[0],
+              height: vyskaHeadru,
               backgroundColor: primaryColor,
             }}
           ></View>
@@ -790,7 +784,7 @@ const PrehledScreen = () => {
                   data={headers}
                   widthArr={headerWidths}
                   style={{
-                    height: vyskaHeadru[0],
+                    height: vyskaHeadru,
                     backgroundColor: primaryColor,
                   }}
                   textStyle={{ ...styles.text, color: "white" }}
