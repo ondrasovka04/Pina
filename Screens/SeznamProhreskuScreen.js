@@ -406,7 +406,7 @@ const SeznamProhreskuScreen = ({ navigation }) => {
             }}
           />
         </View>
-        <ScrollView style={{ display: nothingToShow ? 'none' : 'flex', zIndex: -11 }}>
+        <View style={{ display: nothingToShow ? 'none' : 'flex', zIndex: -11 }}>
           <Table borderStyle={{ borderWidth: 2, borderColor: "transparent" }}>
             {Platform.OS == "web" ? (
               <Row
@@ -422,23 +422,25 @@ const SeznamProhreskuScreen = ({ navigation }) => {
                 widthArr={[180, 60, 60, 30, 30]}
               />
             )}
-            {tableData.map((rowData, index) => (
-              <Row
-                key={index}
-                data={rowData}
-                widthArr={[180, 60, 60, 30, 30]}
-                textStyle={styles.text}
-                style={{ display: Platform.OS == "web" ? "none" : "flex" }}
-              />
-            ))}
+            <ScrollView>
+              {tableData.map((rowData, index) => (
+                <Row
+                  key={index}
+                  data={rowData}
+                  widthArr={[180, 60, 60, 30, 30]}
+                  textStyle={styles.text}
+                  style={{ display: Platform.OS == "web" ? "none" : "flex" }}
+                />
+              ))}
 
-            {Platform.OS == "web" ? (
-              <Rows data={tableData} textStyle={styles.text} />
-            ) : (
-              <></>
-            )}
+              {Platform.OS == "web" ? (
+                <Rows data={tableData} textStyle={styles.text} />
+              ) : (
+                <></>
+              )}
+            </ScrollView>
           </Table>
-        </ScrollView>
+        </View>
       </View>
     </>
   );

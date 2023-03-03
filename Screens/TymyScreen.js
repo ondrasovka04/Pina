@@ -254,16 +254,16 @@ const TymyScreen = ({ navigation }) => {
             <Text style={styles.ButtonTextStyle}>Přidat tým</Text>
           </View>
         </TouchableOpacity>
-        <ScrollView>
-          <Table borderStyle={{ borderWidth: 2, borderColor: "transparent" }}>
-            <Row
-              data={["Název", ""]}
-              style={styles.head}
-              textStyle={styles.text}
-            />
+        <Table borderStyle={{ borderWidth: 2, borderColor: "transparent" }}>
+          <Row
+            data={["Název", ""]}
+            style={styles.head}
+            textStyle={styles.text}
+          />
+          <ScrollView>
             <Rows data={tableData} textStyle={styles.text} />
-          </Table>
-        </ScrollView>
+          </ScrollView>
+        </Table>
       </View>
     </>
   );

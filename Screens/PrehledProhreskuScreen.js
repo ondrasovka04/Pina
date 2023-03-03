@@ -58,9 +58,9 @@ const PrehledProhreskuScreen = ({ navigation }) => {
 
     fetch(
       "https://pina.trialhosting.cz/api/prehled/getSezony.php?id=" +
-        global.id +
-        "&tym=" +
-        tymId,
+      global.id +
+      "&tym=" +
+      tymId,
       {
         method: "GET",
         headers: {
@@ -89,9 +89,9 @@ const PrehledProhreskuScreen = ({ navigation }) => {
     });
     fetch(
       "https://pina.trialhosting.cz/api/seznamProhresku/getSeznam.php?id=" +
-        tymId +
-        "&sezona=" +
-        vybranaSezona,
+      tymId +
+      "&sezona=" +
+      vybranaSezona,
       {
         method: "GET",
         headers: {
@@ -169,16 +169,18 @@ const PrehledProhreskuScreen = ({ navigation }) => {
             }}
           />
         </View>
-        <ScrollView style={{ display: nothingToShow ? "none" : "flex" }}>
+        <View style={{ display: nothingToShow ? "none" : "flex" }}>
           <Table borderStyle={{ borderWidth: 2, borderColor: "transparent" }}>
             <Row
               data={["Název", "Částka"]}
               style={styles.head}
               textStyle={styles.text}
             />
-            <Rows data={tableData} textStyle={styles.text} />
+            <ScrollView>
+              <Rows data={tableData} textStyle={styles.text} />
+            </ScrollView>
           </Table>
-        </ScrollView>
+        </View>
         <View
           style={{
             display: nothingToShow ? "flex" : "none",

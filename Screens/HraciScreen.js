@@ -487,7 +487,7 @@ const HraciScreen = ({ navigation }) => {
             </TouchableOpacity>
           </View>
         </View>
-        <ScrollView style={{ zIndex: -11, display: nothingToShow ? 'none' : 'flex' }}>
+        <View style={{ zIndex: -11, display: nothingToShow ? 'none' : 'flex' }}>
           <Table borderStyle={{ borderWidth: 2, borderColor: "transparent" }}>
             {Platform.OS == "web" ? (
               <Row
@@ -504,27 +504,29 @@ const HraciScreen = ({ navigation }) => {
                 widthArr={[80, 250, 30]}
               />
             )}
-            {tableData.map((rowData, index) => (
-              <Row
-                key={index}
-                data={rowData}
-                widthArr={[80, 250, 30]}
-                textStyle={styles.text}
-                style={{ display: Platform.OS == "web" ? "none" : "flex" }}
-              />
-            ))}
+            <ScrollView>
+              {tableData.map((rowData, index) => (
+                <Row
+                  key={index}
+                  data={rowData}
+                  widthArr={[80, 250, 30]}
+                  textStyle={styles.text}
+                  style={{ display: Platform.OS == "web" ? "none" : "flex" }}
+                />
+              ))}
 
-            {Platform.OS == "web" ? (
-              <Rows
-                data={tableData}
-                textStyle={styles.text}
-                widthArr={[80, 250, 30]}
-              />
-            ) : (
-              <></>
-            )}
+              {Platform.OS == "web" ? (
+                <Rows
+                  data={tableData}
+                  textStyle={styles.text}
+                  widthArr={[80, 250, 30]}
+                />
+              ) : (
+                <></>
+              )}
+            </ScrollView>
           </Table>
-        </ScrollView>
+        </View>
       </View>
     </>
   );

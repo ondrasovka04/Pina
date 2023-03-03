@@ -15,6 +15,7 @@ import { getCredentials } from "../logins";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Connectivity from "../CheckConn";
+import { ScrollView } from "react-native-gesture-handler";
 
 const SezonyScreen = ({ navigation }) => {
   Connectivity();
@@ -371,14 +372,16 @@ const SezonyScreen = ({ navigation }) => {
             textStyle={styles.text}
             widthArr={[80, 90, 90, 30, 30]}
           />
-          {tableData.map((rowData, index) => (
-            <Row
-              key={index}
-              data={rowData}
-              widthArr={[80, 90, 90, 30, 30]}
-              textStyle={styles.text}
-            />
-          ))}
+          <ScrollView>
+            {tableData.map((rowData, index) => (
+              <Row
+                key={index}
+                data={rowData}
+                widthArr={[80, 90, 90, 30, 30]}
+                textStyle={styles.text}
+              />
+            ))}
+          </ScrollView>
         </Table>
       </View>
     </>

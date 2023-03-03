@@ -323,16 +323,16 @@ const SezonyScreen = ({ navigation }) => {
             <Text style={styles.ButtonTextStyle}>Přidat sezónu</Text>
           </View>
         </TouchableOpacity>
-        <ScrollView>
-          <Table borderStyle={{ borderWidth: 2, borderColor: "transparent" }}>
-            <Row
-              data={["Název", "Datum od", "Datum do", "", ""]}
-              style={styles.head}
-              textStyle={styles.text}
-            />
+        <Table borderStyle={{ borderWidth: 2, borderColor: "transparent" }}>
+          <Row
+            data={["Název", "Datum od", "Datum do", "", ""]}
+            style={styles.head}
+            textStyle={styles.text}
+          />
+          <ScrollView>
             <Rows data={tableData} textStyle={styles.text} />
-          </Table>
-        </ScrollView>
+          </ScrollView>
+        </Table>
       </View>
     </>
   );

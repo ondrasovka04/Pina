@@ -235,7 +235,7 @@ const PrehledZapsanychProhreskuScreen = ({ navigation }) => {
           </View>
         </View>
 
-        <ScrollView style={{ display: nothingToShow ? 'none' : 'flex' }}>
+        <View style={{ display: nothingToShow ? 'none' : 'flex' }}>
           <Table borderStyle={{ borderWidth: 2, borderColor: "transparent" }}>
             {Platform.OS == "web" ? (
               <Row
@@ -251,23 +251,25 @@ const PrehledZapsanychProhreskuScreen = ({ navigation }) => {
                 widthArr={[180, 140, Dimensions.get("screen").width - 180 - 90]}
               />
             )}
-            {tableData.map((rowData, index) => (
-              <Row
-                key={index}
-                data={rowData}
-                widthArr={[180, 140, Dimensions.get("screen").width - 180 - 90]}
-                textStyle={styles.text}
-                style={{ display: Platform.OS == "web" ? "none" : "flex" }}
-              />
-            ))}
+            <ScrollView>
+              {tableData.map((rowData, index) => (
+                <Row
+                  key={index}
+                  data={rowData}
+                  widthArr={[180, 140, Dimensions.get("screen").width - 180 - 90]}
+                  textStyle={styles.text}
+                  style={{ display: Platform.OS == "web" ? "none" : "flex" }}
+                />
+              ))}
 
-            {Platform.OS == "web" ? (
-              <Rows data={tableData} textStyle={styles.text} />
-            ) : (
-              <></>
-            )}
+              {Platform.OS == "web" ? (
+                <Rows data={tableData} textStyle={styles.text} />
+              ) : (
+                <></>
+              )}
+            </ScrollView>
           </Table>
-        </ScrollView>
+        </View>
       </View>
     </>
   );
@@ -307,6 +309,6 @@ const styles = StyleSheet.create({
     textAlignVertical: "top",
     marginTop: 13,
   },
-  
+
 });
 export default PrehledZapsanychProhreskuScreen;

@@ -162,7 +162,7 @@ const AdminiScreen = ({ navigation }) => {
 
   const DeleteTlacitko = (index) => (
     <TouchableOpacity
-    style={{ width: Platform.OS == "web" ? 25 : 15 }}
+      style={{ width: Platform.OS == "web" ? 25 : 15 }}
       onPress={() => {
         if (Platform.OS == "web") {
           if (confirm("Opravdu chcete odebrat roli admina?")) {
@@ -287,16 +287,16 @@ const AdminiScreen = ({ navigation }) => {
             <Text style={styles.ButtonTextStyle}>Přidat admina</Text>
           </View>
         </TouchableOpacity>
-        <ScrollView>
-          <Table borderStyle={{ borderWidth: 2, borderColor: "transparent" }}>
-            <Row
-              data={["Jméno", "Tým", ""]}
-              style={styles.head}
-              textStyle={styles.text}
-            />
+        <Table borderStyle={{ borderWidth: 2, borderColor: "transparent" }}>
+          <Row
+            data={["Jméno", "Tým", ""]}
+            style={styles.head}
+            textStyle={styles.text}
+          />
+          <ScrollView>
             <Rows data={tableData} textStyle={styles.text} />
-          </Table>
-        </ScrollView>
+          </ScrollView>
+        </Table>
       </View>
     </>
   );
@@ -342,6 +342,6 @@ const styles = StyleSheet.create({
     textAlignVertical: "top",
     marginTop: 13,
   },
-  
+
 });
 export default AdminiScreen;
