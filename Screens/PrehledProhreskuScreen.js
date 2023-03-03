@@ -126,7 +126,7 @@ const PrehledProhreskuScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={{ display: isLoading ? "none" : "flex" }}>
-        <View style={styles.DropDownPickerContainer}>
+        <View style={[styles.DropDownPickerContainer, { zIndex: 20000 }]}>
           <Text style={styles.DropDownPickerLable}>Týmy:</Text>
           <DropDownPicker
             open={openTymy}
@@ -149,7 +149,7 @@ const PrehledProhreskuScreen = ({ navigation }) => {
             }}
           />
         </View>
-        <View style={styles.DropDownPickerContainer}>
+        <View style={[styles.DropDownPickerContainer, { zIndex: 19000 }]}>
           <Text style={styles.DropDownPickerLable}>Sezóny:</Text>
           <DropDownPicker
             open={openSezony}

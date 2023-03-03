@@ -39,7 +39,7 @@ const PrehledZapsanychProhreskuScreen = ({ navigation }) => {
     setIsLoading(true);
     fetch(
       "https://pina.trialhosting.cz/api/prehledZapsanychProhresku/getSezony.php?tym=" +
-      global.admin,
+        global.admin,
       {
         method: "GET",
         headers: {
@@ -62,9 +62,9 @@ const PrehledZapsanychProhreskuScreen = ({ navigation }) => {
 
         fetch(
           "https://pina.trialhosting.cz/api/prehledZapsanychProhresku/getHraci.php?tym=" +
-          global.admin +
-          "&sezona=" +
-          vybranaSezona,
+            global.admin +
+            "&sezona=" +
+            vybranaSezona,
           {
             method: "GET",
             headers: {
@@ -87,11 +87,11 @@ const PrehledZapsanychProhreskuScreen = ({ navigation }) => {
 
             fetch(
               "https://pina.trialhosting.cz/api/prehledZapsanychProhresku/getProhresky.php?hrac=" +
-              vybranyHrac +
-              "&tym=" +
-              global.admin +
-              "&sezona=" +
-              vybranaSezona,
+                vybranyHrac +
+                "&tym=" +
+                global.admin +
+                "&sezona=" +
+                vybranaSezona,
               {
                 method: "GET",
                 headers: {
@@ -128,7 +128,7 @@ const PrehledZapsanychProhreskuScreen = ({ navigation }) => {
   function deleteSezony(id) {
     fetch(
       "https://pina.trialhosting.cz/api/prehledZapsanychProhresku/deleteProhresek.php?id=" +
-      id,
+        id,
       {
         method: "GET",
         headers: {
@@ -213,29 +213,33 @@ const PrehledZapsanychProhreskuScreen = ({ navigation }) => {
               }}
             />
           </View>
-          <View style={[styles.DropDownPickerContainer, { zIndex: 19990 }]}>
+          <View style={[styles.DropDownPickerContainer, { zIndex: 19990}]}>
             <Text style={styles.DropDownPickerLable}>Hráč:</Text>
-            <DropDownPicker
-              open={openHraci}
-              value={vybranyHrac}
-              items={hraci}
-              setOpen={setOpenHraci}
-              setValue={setVybranyHrac}
-              setItems={setHraci}
-              placeholder="Vyberte"
-              style={{ width: 200, marginBottom: 10 }}
-              containerStyle={{
-                width: 200,
-              }}
-              onSelectItem={() => {
-                setUmelejUpdate(() => umelejUpdate + 1);
-                setNothingToShow(false);
-              }}
-            />
+            <ScrollView nestedScrollEnabled={true}>
+              <DropDownPicker
+                open={openHraci}
+                value={vybranyHrac}
+                items={hraci}
+                setOpen={setOpenHraci}
+                setValue={setVybranyHrac}
+                setItems={setHraci}
+                placeholder="Vyberte"
+                listMode="SCROLLVIEW"
+                style={{ width: 200, marginBottom: 10 }}
+                containerStyle={{
+                  width: 200,
+                  zIndex: 19900
+                }}
+                onSelectItem={() => {
+                  setUmelejUpdate(() => umelejUpdate + 1);
+                  setNothingToShow(false);
+                }}
+              />
+            </ScrollView>
           </View>
         </View>
 
-        <View style={{ display: nothingToShow ? 'none' : 'flex' }}>
+        <View style={{ display: nothingToShow ? "none" : "flex", zIndex: -11 }}>
           <Table borderStyle={{ borderWidth: 2, borderColor: "transparent" }}>
             {Platform.OS == "web" ? (
               <Row
@@ -256,7 +260,11 @@ const PrehledZapsanychProhreskuScreen = ({ navigation }) => {
                 <Row
                   key={index}
                   data={rowData}
-                  widthArr={[180, 140, Dimensions.get("screen").width - 180 - 90]}
+                  widthArr={[
+                    180,
+                    140,
+                    Dimensions.get("screen").width - 180 - 90,
+                  ]}
                   textStyle={styles.text}
                   style={{ display: Platform.OS == "web" ? "none" : "flex" }}
                 />
@@ -295,7 +303,6 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     padding: 15,
     marginBottom: 15,
-
   },
   DropDownPickerContainer: {
     flexDirection: "row",
@@ -309,6 +316,5 @@ const styles = StyleSheet.create({
     textAlignVertical: "top",
     marginTop: 13,
   },
-
 });
 export default PrehledZapsanychProhreskuScreen;
