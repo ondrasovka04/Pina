@@ -178,7 +178,7 @@ const PrehledScreen = () => {
           }
           widths.push(nejvetsiSirka * 12);
 
-          var vyska = novejNazev.split("\n").length * 30;
+          var vyska = novejNazev.split("\n").length * 40;
           if (vyska > vyskaHeadru[0]) {
             var test = [];
             test.push(vyska);
