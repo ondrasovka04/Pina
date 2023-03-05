@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
   },
   DropDownPickerLable: {
     fontSize: 17,
-    width: 80,
+    width: 90,
     padding: 0,
     paddingRight: 20,
     paddingBottom: 0,
