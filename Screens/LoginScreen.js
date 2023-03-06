@@ -116,7 +116,7 @@ const LoginScreen = ({ navigation }) => {
   };
 
   const handleLinkPress = async () => {
-    const url = "https://drive.google.com/file/d/1OP0-lvQE-mQ2As7d3ASFhCYD7VDm-tvZ/view?usp=sharing";
+    const url = "https://play.google.com/store/apps/details?id=com.ondrasovka2004.Pina";
     const supported = await Linking.canOpenURL(url);
 
     if (supported) {
