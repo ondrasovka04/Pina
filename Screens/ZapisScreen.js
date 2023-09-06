@@ -296,6 +296,7 @@ const ZapisScreen = ({ route, navigation }) => {
                     display: isLoading ? 'none' : 'flex',
                     flexDirection: 'row',
                     backgroundColor: '#eee',
+                    marginBottom: Platform.OS == 'web' ? 0 : 110,
                 }}
             >
                 <View

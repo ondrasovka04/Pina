@@ -39,7 +39,8 @@
     "react-native-svg": "12.3.0",
     "react-native-table-component": "github:sturmenta/react-native-table-component#e1582aaba92b7e070c31c98b116eea9c23e17f6d",
     "react-native-vector-icons": "^9.2.0",
-    "react-native-web": "~0.18.7"
+    "react-native-web": "~0.18.7",
+    "expo-build-properties": "~0.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"
