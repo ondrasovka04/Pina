@@ -27,7 +27,7 @@
       },
       "package": "com.ondrasovka2004.Pina",
       "googleServicesFile": "./google-services.json",
-      "versionCode": 7
+      "versionCode": 6
     },
     "web": {
       "favicon": "./assets/ikona.png"
@@ -36,6 +36,16 @@
       "eas": {
         "projectId": "a84d71ea-cd55-4611-bef4-13200bd8668a"
       }
-    }
+    },
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "targetSdkVersion": 33
+          }
+        }
+      ]
+    ]
   }
 }

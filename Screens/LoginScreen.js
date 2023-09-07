@@ -15,7 +15,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Checkbox from "expo-checkbox";
 import jsSHA from "jssha";
 import { getCredentials } from "../logins";
-import { registerIndieID } from "native-notify";
+//import { registerIndieID } from "native-notify";
 import Connectivity from '../CheckConn';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -103,7 +103,7 @@ const LoginScreen = ({ navigation }) => {
           tym.nazev = response[i].nazev;
           global.tym.push(tym);
         }
-        await registerIndieID(`${global.id}`, 6410, "8GZqBfY2dlph013xl9BGiQ");
+        //await registerIndieID(`${global.id}`, 6410, "8GZqBfY2dlph013xl9BGiQ");
         navigation.navigate("Menu");
         setIsLoading(false);
       })

@@ -3,11 +3,11 @@ import MenuScreen from './Screens/Menu';
 import ZapisScreen from './Screens/ZapisScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import registerNNPushToken from 'native-notify';
+//import registerNNPushToken from 'native-notify';
 
 export default function App() {
   const Stack = createNativeStackNavigator();
-  registerNNPushToken(6410, '8GZqBfY2dlph013xl9BGiQ');
+  //registerNNPushToken(6410, '8GZqBfY2dlph013xl9BGiQ');
 
   const MyStack = () => {
     return (
