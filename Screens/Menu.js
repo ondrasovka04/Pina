@@ -12,6 +12,7 @@ import PrehledProhreskuScreen from './PrehledProhreskuScreen';
 import AdminiScreen from './AdminiScreen';
 import TymyScreen from './TymyScreen';
 import PrehledZapsanychProhreskuScreen from './PrehledZapsanychProhreskuScreen';
+import PrehledMychProhreskuScreen from './PrehledMychProhreskuScreen';
 
 const Drawer = createDrawerNavigator();
 const MenuScreen = () => {
@@ -36,6 +37,10 @@ const MenuScreen = () => {
                     name="Přehled zapsaných prohřešků"
                     options={{ drawerLabel: 'Přehled zapsaných prohřešků' }}
                     component={PrehledZapsanychProhreskuScreen} />
+                <Drawer.Screen
+                    name="Přehled mých prohřešků"
+                    options={{ drawerLabel: 'Přehled mých prohřešků' }}
+                    component={PrehledMychProhreskuScreen} />
                 <Drawer.Screen
                     name="Hráči"
                     options={{ drawerLabel: 'Hráči' }}
@@ -84,6 +89,10 @@ const MenuScreen = () => {
                     options={{ drawerLabel: 'Přehled zapsaných prohřešků' }}
                     component={PrehledZapsanychProhreskuScreen} />
                 <Drawer.Screen
+                    name="Přehled mých prohřešků"
+                    options={{ drawerLabel: 'Přehled mých prohřešků' }}
+                    component={PrehledMychProhreskuScreen} />
+                <Drawer.Screen
                     name="Hráči"
                     options={{ drawerLabel: 'Hráči' }}
                     component={HraciScreen} />
@@ -113,6 +122,10 @@ const MenuScreen = () => {
                     name="Přehled"
                     options={{ drawerLabel: 'Přehled' }}
                     component={PrehledScreen} />
+                <Drawer.Screen
+                    name="Přehled mých prohřešků"
+                    options={{ drawerLabel: 'Přehled mých prohřešků' }}
+                    component={PrehledMychProhreskuScreen} />
                 <Drawer.Screen
                     name="Přehled prohřešků"
                     options={{ drawerLabel: 'Přehled prohřešků' }}
