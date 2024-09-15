@@ -172,7 +172,9 @@ const HraciScreen = ({ navigation }) => {
       "https://pina.trialhosting.cz/api/uzivatele/pozastavitUzivatele.php?idUzivatel=" +
       id +
       "&idTym=" +
-      global.admin,
+      global.admin +
+      "&idSezona=" +
+      vybranaSezona,
       {
         method: "GET",
         headers: {

@@ -116,12 +116,12 @@ const SeznamProhreskuScreen = ({ navigation }) => {
   }, [umelejUpdate]);
 
   function updateSeznamu() {
-    if (isNaN(castka)) {
+    if (isNaN(castka) || castka == "") {
       alert("Částka nemůže mít nečíselnou hodnu");
       return;
     }
 
-    if (isNaN(poradi)) {
+    if (isNaN(poradi) || poradi == "") {
       alert("Pořadí nemůže mít nečíselnou hodnotu");
       return;
     }
@@ -159,12 +159,12 @@ const SeznamProhreskuScreen = ({ navigation }) => {
   }
 
   function insertSeznamu() {
-    if (isNaN(castka)) {
+    if (isNaN(castka) || castka == "") {
       alert("Částka nemůže mít nečíselnou hodnu");
       return;
     }
 
-    if (isNaN(poradi)) {
+    if (isNaN(poradi) || poradi == "") {
       alert("Pořadí nemůže mít nečíselnou hodnotu");
       return;
     }
