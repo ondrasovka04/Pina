@@ -215,8 +215,6 @@ const HraciScreen = ({ navigation }) => {
   }
 
   function insertHrace() {
-
-
     if (vybranaSezonaVDivu == "") {
       alert("Sezóna byla vybrána nesprávně.");
       return;
@@ -236,7 +234,7 @@ const HraciScreen = ({ navigation }) => {
       body: JSON.stringify({
         idTym: global.admin,
         idUzivatel: vybranyHrac,
-        idSezona: vybranaSezona,
+        idSezona: vybranaSezonaVDivu,
       }),
     })
       .then((response) => response.json())
