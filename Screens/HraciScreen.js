@@ -489,7 +489,7 @@ const HraciScreen = ({ navigation }) => {
             </TouchableOpacity>
           </View>
         </View>
-        <View style={{ zIndex: -11, display: nothingToShow ? 'none' : 'flex' }}>
+        <ScrollView style={{ zIndex: -11, display: nothingToShow ? 'none' : 'flex' }}>
           <Table borderStyle={{ borderWidth: 2, borderColor: "transparent" }}>
             {Platform.OS == "web" ? (
               <Row
@@ -528,7 +528,7 @@ const HraciScreen = ({ navigation }) => {
               )}
             </ScrollView>
           </Table>
-        </View>
+        </ScrollView>
       </View>
     </>
   );
