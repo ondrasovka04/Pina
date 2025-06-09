@@ -36,7 +36,7 @@
     "react-native-safe-area-context": "4.3.1",
     "react-native-screens": "~3.15.0",
     "react-native-svg": "12.3.0",
-    "react-native-table-component": "github:sturmenta/react-native-table-component#e1582aaba92b7e070c31c98b116eea9c23e17f6d",
+    "react-native-table-component": "file:libs/react-native-table-component",
     "react-native-vector-icons": "^9.2.0",
     "react-native-web": "~0.18.12"
   },
