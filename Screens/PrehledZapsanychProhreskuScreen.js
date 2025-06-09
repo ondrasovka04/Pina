@@ -243,15 +243,16 @@ const PrehledZapsanychProhreskuScreen = ({ navigation }) => {
         <View style={{ display: nothingToShow ? "none" : "flex", zIndex: -11, transform: [{ translateY: -150 }] }}>
           <DataTable>
             <DataTable.Header>
-              <DataTable.Title>Název</DataTable.Title>
-              <DataTable.Title>Datum</DataTable.Title>
-              <DataTable.Title></DataTable.Title>
+              <DataTable.Title style={{ flex: 2.5 }}>Název</DataTable.Title>
+              <DataTable.Title style={{ flex: 1.5 }}>Datum</DataTable.Title>
+              <DataTable.Title style={{ flex: 0.5 }}></DataTable.Title>
             </DataTable.Header>
+
             {tableData.map((row, index) => (
               <DataTable.Row key={index}>
-                <DataTable.Cell>{row[0]}</DataTable.Cell>
-                <DataTable.Cell>{row[1]}</DataTable.Cell>
-                <DataTable.Cell>{row[2]}</DataTable.Cell>
+                <DataTable.Cell style={{ flex: 2.5 }}>{row[0]}</DataTable.Cell>
+                <DataTable.Cell style={{ flex: 1.5 }}>{row[1]}</DataTable.Cell>
+                <DataTable.Cell style={{ flex: 0.5 }}>{row[2]}</DataTable.Cell>
               </DataTable.Row>
             ))}
           </DataTable>

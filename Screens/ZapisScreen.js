@@ -41,7 +41,7 @@ const ZapisScreen = ({ route, navigation }) => {
                     headersTemp.push(off.nazev);
                     idsTemp.push(off.id);
 
-                    const calculatedWidth = off.nazev.length * 7.5 + 32;
+                    const calculatedWidth = off.nazev.length * 7.5 + 20;
                     const finalWidth = Math.min(Math.max(calculatedWidth, 90), 160);
                     widthsTemp.push(finalWidth);
                 });
@@ -178,7 +178,7 @@ const ZapisScreen = ({ route, navigation }) => {
 
             <View style={{ flexDirection: 'row', flex: 1, marginTop: 10 }}>
                 {/* Levý sloupec */}
-                <View style={{ width: 100 }}>
+                <View style={{ width: 60 }}>
                     <View style={[styles.cell, { height: vyskaHeadru, backgroundColor: 'dodgerblue' }]} />
                     <ScrollView
                         ref={leftScroll}
@@ -187,7 +187,7 @@ const ZapisScreen = ({ route, navigation }) => {
                     >
                         {hraci.map((hrac, i) => (
                             <View key={i} style={[styles.cell, { height: 60, backgroundColor: i % 2 ? '#eee' : 'white' }]}>
-                                <Text style={{ textAlign: 'center' }}>{hrac}</Text>
+                                <Text style={{ textAlign: 'center' }} numberOfLines={2}>{hrac}</Text>
                             </View>
                         ))}
                         <View style={{ height: 15 }} />

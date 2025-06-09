@@ -367,19 +367,19 @@ const SezonyScreen = ({ navigation }) => {
         </TouchableOpacity>
         <DataTable>
           <DataTable.Header>
-            <DataTable.Title>Název</DataTable.Title>
-            <DataTable.Title>Datum od</DataTable.Title>
-            <DataTable.Title>Datum do</DataTable.Title>
-            <DataTable.Title></DataTable.Title>
-            <DataTable.Title></DataTable.Title>
+            <DataTable.Title style={{ flex: 1 }}>Název</DataTable.Title>
+            <DataTable.Title style={{ flex: 2 }}>Datum od</DataTable.Title>
+            <DataTable.Title style={{ flex: 2 }}>Datum do</DataTable.Title>
+            <DataTable.Title style={{ flex: 0.3 }}></DataTable.Title>
+            <DataTable.Title style={{ flex: 0.3 }}></DataTable.Title>
           </DataTable.Header>
             {tableData.map((row, index) => (
               <DataTable.Row key={index}>
-                <DataTable.Cell>{row[0]}</DataTable.Cell>
-                <DataTable.Cell>{row[1]}</DataTable.Cell>
-                <DataTable.Cell>{row[2]}</DataTable.Cell>
-                <DataTable.Cell>{row[3]}</DataTable.Cell>
-                <DataTable.Cell>{row[4]}</DataTable.Cell>
+                <DataTable.Cell style={{ flex: 1 }}>{row[0]}</DataTable.Cell>
+                <DataTable.Cell style={{ flex: 2 }}>{row[1]}</DataTable.Cell>
+                <DataTable.Cell style={{ flex: 2 }}>{row[2]}</DataTable.Cell>
+                <DataTable.Cell style={{ flex: 0.3 }}>{row[3]}</DataTable.Cell>
+                <DataTable.Cell style={{ flex: 0.3 }}>{row[4]}</DataTable.Cell>
               </DataTable.Row>
             ))}
         </DataTable>

@@ -409,19 +409,19 @@ const SeznamProhreskuScreen = ({ navigation }) => {
         <View style={{ display: nothingToShow ? 'none' : 'flex', zIndex: -11 }}>
           <DataTable>
             <DataTable.Header>
-              <DataTable.Title>Název</DataTable.Title>
-              <DataTable.Title>Částka</DataTable.Title>
-              <DataTable.Title>Pořadí</DataTable.Title>
-              <DataTable.Title></DataTable.Title>
-              <DataTable.Title></DataTable.Title>
+              <DataTable.Title style={{ flex: 4 }}>Název</DataTable.Title>
+              <DataTable.Title style={{ flex: 1 }}>Částka</DataTable.Title>
+              <DataTable.Title style={{ flex: 1 }}>Pořadí</DataTable.Title>
+              <DataTable.Title style={{ flex: 0.5 }}></DataTable.Title>
+              <DataTable.Title style={{ flex: 0.3 }}></DataTable.Title>
             </DataTable.Header>
             {tableData.map((row, index) => (
               <DataTable.Row key={index}>
-                <DataTable.Cell>{row[0]}</DataTable.Cell>
-                <DataTable.Cell>{row[1]}</DataTable.Cell>
-                <DataTable.Cell>{row[2]}</DataTable.Cell>
-                <DataTable.Cell>{row[3]}</DataTable.Cell>
-                <DataTable.Cell>{row[4]}</DataTable.Cell>
+                <DataTable.Cell style={{ flex: 4 }}>{row[0]}</DataTable.Cell>
+                <DataTable.Cell style={{ flex: 1 }}>{row[1]}</DataTable.Cell>
+                <DataTable.Cell style={{ flex: 1 }}>{row[2]}</DataTable.Cell>
+                <DataTable.Cell style={{ flex: 0.5 }}>{row[3]}</DataTable.Cell>
+                <DataTable.Cell style={{ flex: 0.3 }}>{row[4]}</DataTable.Cell>
               </DataTable.Row>
             ))}
           </DataTable>

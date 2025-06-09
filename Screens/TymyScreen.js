@@ -10,7 +10,6 @@ import {
   ActivityIndicator,
   Button,
   Alert,
-  ScrollView,
 } from "react-native";
 import { DataTable } from "react-native-paper";
 import { getCredentials } from "../logins";
@@ -256,13 +255,13 @@ const TymyScreen = ({ navigation }) => {
         </TouchableOpacity>
         <DataTable>
           <DataTable.Header>
-            <DataTable.Title>Název</DataTable.Title>
-            <DataTable.Title></DataTable.Title>
+            <DataTable.Title style={{ flex: 2 }}>Název</DataTable.Title>
+            <DataTable.Title style={{ flex: 1 }}></DataTable.Title>
           </DataTable.Header>
           {tableData.map((row, index) => (
             <DataTable.Row key={index}>
-              <DataTable.Cell>{row[0]}</DataTable.Cell>
-              <DataTable.Cell>{row[1]}</DataTable.Cell>
+              <DataTable.Cell style={{ flex: 2 }}>{row[0]}</DataTable.Cell>
+              <DataTable.Cell style={{ flex: 1 }}>{row[1]}</DataTable.Cell>
             </DataTable.Row>
           ))}
         </DataTable>

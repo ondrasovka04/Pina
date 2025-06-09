@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { ScrollView, View, Text, StyleSheet, TouchableOpacity, Dimensions, Button, Platform } from "react-native";
+import { ScrollView, View, Text, StyleSheet, TouchableOpacity, Dimensions, Button, Platform, ActivityIndicator } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { PieChart } from "react-native-chart-kit";
 import { getCredentials } from "../logins";
@@ -16,6 +16,7 @@ export default function PrehledTable() {
   const [vybranaSezona, setVybranaSezona] = useState(null);
   const [openTymy, setOpenTymy] = useState(false);
   const [openSezony, setOpenSezony] = useState(false);
+  const[isLoading, setIsLoading] = useState(false);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedOffense, setSelectedOffense] = useState("");
@@ -62,6 +63,8 @@ export default function PrehledTable() {
     const vybrany = global.tym.find(t => t.nazev === vybranyTym);
     if (!vybrany) return;
 
+    setIsLoading(true);
+
     fetch(
       `https://pinaprosek.eu/api/prehled/getPrehled.php?tym=${vybrany.id}&sezona=${vybranaSezona}&email=${global.email}`,
       {
@@ -74,6 +77,7 @@ export default function PrehledTable() {
       .then((res) => res.json())
       .then((json) => {
         processData(json);
+        setIsLoading(false);
       });
   }, [vybranaSezona]);
 
@@ -88,12 +92,11 @@ export default function PrehledTable() {
     const table = [];
 
     offenses.forEach(off => {
-      const calculatedWidth = off.length * 7.5 + 32;
-      const finalWidth = Math.min(Math.max(calculatedWidth, 90), 160);
+      const calculatedWidth = off.length * 7.5 + 20;
+      const finalWidth = Math.min(Math.max(calculatedWidth, 50), 160);
       colWidthsTemp.push(finalWidth);
     });
-
-    colWidthsTemp.push(100);
+    colWidthsTemp.push(70);
     setColWidths(colWidthsTemp);
 
     names.forEach(n => {
@@ -123,7 +126,7 @@ export default function PrehledTable() {
     )
       .then(res => res.json())
       .then(data => {
-        const daty = data.length > 0 ? data.map(d => [new Date(d.Datum).toLocaleDateString()]) : [["Žádné datumy"]];
+        const daty = data.length > 0 ? data.map(d => [new Date(d.Datum).toLocaleDateString("cs-CZ")]) : [["Žádné datumy"]];
         setOffenseDates(daty);
 
         const userCount = rows[0].vals[index];
@@ -155,7 +158,7 @@ export default function PrehledTable() {
   return (
     <View style={{ flex: 1, paddingTop: 10 }}>
       {/* Výběr týmů a sezón */}
-      <View style={{ flexDirection: "row", marginLeft: 20, marginBottom: 20, zIndex: 1000 }}>
+      <View style={{ flexDirection: "column", marginLeft: 20, marginBottom: 20, zIndex: 1000 }}>
         <View style={{ width: 200, marginRight: 10, zIndex: openTymy ? 2000 : 1000 }}>
           <Text style={{ marginBottom: 5 }}>Tým:</Text>
           <DropDownPicker
@@ -172,7 +175,7 @@ export default function PrehledTable() {
         </View>
 
         <View style={{ width: 200, zIndex: openSezony ? 2000 : 500 }}>
-          <Text style={{ marginBottom: 5 }}>Sezóna:</Text>
+          <Text style={{ marginBottom: 5, marginTop: 5 }}>Sezóna:</Text>
           <DropDownPicker
             open={openSezony}
             value={vybranaSezona}
@@ -188,7 +191,13 @@ export default function PrehledTable() {
       </View>
 
       {/* Tabulka */}
-      {rows.length > 0 && (
+      {isLoading ? (
+        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+          <View style={{ marginTop: 15 }}>
+            <ActivityIndicator size="large" />
+          </View>
+        </View>
+      ) : rows.length > 0 && (
         <View style={{ flex: 1, flexDirection: "row" }}>
           <View>
             <View style={[styles.headerCell, styles.fixedCell, { height: 60 }]}>
@@ -207,9 +216,10 @@ export default function PrehledTable() {
                     styles.fixedCell,
                     r.jmeno === "Součet" && styles.totalCell,
                     { height: 50 },
+                    { width: 80 },
                   ]}
                 >
-                  <Text style={styles.nameText}>{r.jmeno}</Text>
+                  <Text style={styles.nameText} numberOfLines={2}>{r.jmeno}</Text>
                 </View>
               ))}
               <View style={{ height: 15 }} />
@@ -359,7 +369,7 @@ export default function PrehledTable() {
                 }}
                 accessor="population"
                 backgroundColor="transparent"
-                center={[15, 0]}
+                center={[70, 0]}
                 hasLegend={false}
               />
 
@@ -394,7 +404,9 @@ export default function PrehledTable() {
                 })}
               </ScrollView>
             </View>
-            <Button title="ZAVŘÍT" onPress={() => setModalVisible(false)} />
+            <View style={{ marginBottom: Platform.OS === 'web' ? 0 : 40 }}>
+              <Button title="ZAVŘÍT" onPress={() => setModalVisible(false)} />
+            </View>
           </ScrollView>
         </View>
       )}
@@ -413,7 +425,7 @@ const styles = StyleSheet.create({
   },
   fixedCell: {
     backgroundColor: "#eef",
-    minWidth: 120,
+    minWidth: 50,
     borderRightWidth: 1,
   },
   headerCell: {

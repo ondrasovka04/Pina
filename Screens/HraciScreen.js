@@ -490,15 +490,15 @@ const HraciScreen = ({ navigation }) => {
         <ScrollView style={{ zIndex: -11, display: nothingToShow ? 'none' : 'flex' }}>
           <DataTable>
             <DataTable.Header>
-              <DataTable.Title>Jméno</DataTable.Title>
-              <DataTable.Title>Email</DataTable.Title>
-              <DataTable.Title></DataTable.Title>
+              <DataTable.Title style={{ flex: 1.3 }}>Jméno</DataTable.Title>
+              <DataTable.Title style={{ flex: 3 }}>Email</DataTable.Title>
+              <DataTable.Title style={{ flex: 0.3 }}></DataTable.Title>
             </DataTable.Header>
             {tableData.map((row, index) => (
               <DataTable.Row key={index}>
-                <DataTable.Cell>{row[0]}</DataTable.Cell>
-                <DataTable.Cell>{row[1]}</DataTable.Cell>
-                <DataTable.Cell>{row[2]}</DataTable.Cell>
+                <DataTable.Cell style={{ flex: 1.3 }}>{row[0]}</DataTable.Cell>
+                <DataTable.Cell style={{ flex: 3 }}>{row[1]}</DataTable.Cell>
+                <DataTable.Cell style={{ flex: 0.3 }}>{row[2]}</DataTable.Cell>
               </DataTable.Row>
             ))}
           </DataTable>

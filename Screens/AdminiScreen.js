@@ -289,17 +289,17 @@ const AdminiScreen = ({ navigation }) => {
         </TouchableOpacity>
         <DataTable>
           <DataTable.Header>
-            <DataTable.Title>Jméno</DataTable.Title>
-            <DataTable.Title>Tým</DataTable.Title>
-            <DataTable.Title></DataTable.Title>
+            <DataTable.Title style={{ flex: 2 }}>Jméno</DataTable.Title>
+            <DataTable.Title style={{ flex: 2 }}>Tým</DataTable.Title>
+            <DataTable.Title style={{ flex: 0.5 }}></DataTable.Title>
           </DataTable.Header>
 
           <ScrollView style={{ maxHeight: 400 }}>
             {tableData.map((row, index) => (
               <DataTable.Row key={index}>
-                <DataTable.Cell>{row[0]}</DataTable.Cell>
-                <DataTable.Cell>{row[1]}</DataTable.Cell>
-                <DataTable.Cell>{row[2]}</DataTable.Cell>
+                <DataTable.Cell style={{ flex: 2 }}>{row[0]}</DataTable.Cell>
+                <DataTable.Cell style={{ flex: 2 }}>{row[1]}</DataTable.Cell>
+                <DataTable.Cell style={{ flex: 0.5 }}>{row[2]}</DataTable.Cell>
               </DataTable.Row>
             ))}
           </ScrollView>

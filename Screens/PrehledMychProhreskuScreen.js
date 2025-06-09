@@ -139,6 +139,7 @@ const PrehledMychProhreskuScreen = ({ navigation }) => {
             setValue={setVybranyTym}
             setItems={setTymy}
             zIndex={3000}
+            placeholder="Vyberte"
             zIndexInverse={1000}
             onSelectItem={(item) => {
               setUmelejUpdate(() => umelejUpdate + 1);
@@ -162,6 +163,7 @@ const PrehledMychProhreskuScreen = ({ navigation }) => {
             setValue={setVybranaSezona}
             setItems={setSezony}
             zIndex={2000}
+            placeholder="Vyberte"
             zIndexInverse={2000}
             onSelectItem={(item) => {
               setUpdatePrehledu(() => updatePrehledu + 1);
@@ -175,13 +177,13 @@ const PrehledMychProhreskuScreen = ({ navigation }) => {
         <View style={{ display: nothingToShow ? "none" : "flex" }}>
           <DataTable>
             <DataTable.Header>
-              <DataTable.Title>Název</DataTable.Title>
-              <DataTable.Title>Datum</DataTable.Title>
+              <DataTable.Title style={{ flex: 2 }} >Název</DataTable.Title>
+              <DataTable.Title style={{ flex: 1 }}>Datum</DataTable.Title>
             </DataTable.Header>
               {tableData.map((row, index) => (
                 <DataTable.Row key={index}>
-                  <DataTable.Cell>{row[0]}</DataTable.Cell>
-                  <DataTable.Cell>{row[1]}</DataTable.Cell>
+                  <DataTable.Cell style={{ flex: 2 }}>{row[0]}</DataTable.Cell>
+                  <DataTable.Cell style={{ flex: 1 }}>{row[1]}</DataTable.Cell>
                 </DataTable.Row>
               ))}
           </DataTable>
