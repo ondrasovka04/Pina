@@ -10,10 +10,10 @@ import {
   Alert,
   Button,
 } from "react-native";
-import { Table, Row } from "react-native-table-component";
+import { DataTable } from "react-native-paper";
 import { getCredentials } from "../logins";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import Icon from "react-native-vector-icons/FontAwesome";
+import { FontAwesome } from '@expo/vector-icons';
 import Connectivity from "../CheckConn";
 import { ScrollView } from "react-native-gesture-handler";
 
@@ -253,7 +253,7 @@ const SezonyScreen = ({ navigation }) => {
       }}
     >
       <View style={styles.btn}>
-        <Icon name="edit" size={15} />
+        <FontAwesome name="edit" size={15} />
       </View>
     </TouchableOpacity>
   );
@@ -279,7 +279,7 @@ const SezonyScreen = ({ navigation }) => {
       }}
     >
       <View style={styles.btn}>
-        <Icon name="trash" size={15} />
+        <FontAwesome name="trash" size={15} />
       </View>
     </TouchableOpacity>
   );
@@ -365,24 +365,24 @@ const SezonyScreen = ({ navigation }) => {
             <Text style={styles.ButtonTextStyle}>Přidat sezónu</Text>
           </View>
         </TouchableOpacity>
-        <Table borderStyle={{ borderWidth: 2, borderColor: "transparent" }}>
-          <Row
-            data={["Název", "Datum od", "Datum do", "", ""]}
-            style={styles.head}
-            textStyle={styles.text}
-            widthArr={[80, 90, 90, 30, 30]}
-          />
-          <ScrollView>
-            {tableData.map((rowData, index) => (
-              <Row
-                key={index}
-                data={rowData}
-                widthArr={[80, 90, 90, 30, 30]}
-                textStyle={styles.text}
-              />
+        <DataTable>
+          <DataTable.Header>
+            <DataTable.Title>Název</DataTable.Title>
+            <DataTable.Title>Datum od</DataTable.Title>
+            <DataTable.Title>Datum do</DataTable.Title>
+            <DataTable.Title></DataTable.Title>
+            <DataTable.Title></DataTable.Title>
+          </DataTable.Header>
+            {tableData.map((row, index) => (
+              <DataTable.Row key={index}>
+                <DataTable.Cell>{row[0]}</DataTable.Cell>
+                <DataTable.Cell>{row[1]}</DataTable.Cell>
+                <DataTable.Cell>{row[2]}</DataTable.Cell>
+                <DataTable.Cell>{row[3]}</DataTable.Cell>
+                <DataTable.Cell>{row[4]}</DataTable.Cell>
+              </DataTable.Row>
             ))}
-          </ScrollView>
-        </Table>
+        </DataTable>
       </View>
     </>
   );

@@ -1,7 +1,7 @@
 npx expo export:web
 
-eas build --platform android --profile androidapk
+eas build --platform android --profile development
 
-eas build --platform android
+eas build --platform android --profile production
 
 npx expo-doctor

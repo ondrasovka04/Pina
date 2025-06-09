@@ -12,9 +12,9 @@ import {
   Alert,
   ScrollView,
 } from "react-native";
-import { Table, Row, Rows } from "react-native-table-component";
+import { DataTable } from "react-native-paper";
 import { getCredentials } from "../logins";
-import Icon from "react-native-vector-icons/FontAwesome";
+import { FontAwesome } from '@expo/vector-icons';
 import Connectivity from "../CheckConn";
 
 const TymyScreen = ({ navigation }) => {
@@ -139,7 +139,7 @@ const TymyScreen = ({ navigation }) => {
       }}
     >
       <View style={styles.btn}>
-        <Icon name="edit" size={Platform.OS == "web" ? 25 : 15} />
+        <FontAwesome name="edit" size={Platform.OS === "web" ? 25 : 15} />
       </View>
     </TouchableOpacity>
   );
@@ -172,7 +172,7 @@ const TymyScreen = ({ navigation }) => {
       }}
     >
       <View style={styles.btn}>
-        <Icon name="trash" size={Platform.OS == "web" ? 25 : 15} />
+        <FontAwesome name="trash" size={Platform.OS === "web" ? 25 : 15} />
       </View>
     </TouchableOpacity>
   );
@@ -254,16 +254,18 @@ const TymyScreen = ({ navigation }) => {
             <Text style={styles.ButtonTextStyle}>Přidat tým</Text>
           </View>
         </TouchableOpacity>
-        <Table borderStyle={{ borderWidth: 2, borderColor: "transparent" }}>
-          <Row
-            data={["Název", ""]}
-            style={styles.head}
-            textStyle={styles.text}
-          />
-          <ScrollView>
-            <Rows data={tableData} textStyle={styles.text} />
-          </ScrollView>
-        </Table>
+        <DataTable>
+          <DataTable.Header>
+            <DataTable.Title>Název</DataTable.Title>
+            <DataTable.Title></DataTable.Title>
+          </DataTable.Header>
+          {tableData.map((row, index) => (
+            <DataTable.Row key={index}>
+              <DataTable.Cell>{row[0]}</DataTable.Cell>
+              <DataTable.Cell>{row[1]}</DataTable.Cell>
+            </DataTable.Row>
+          ))}
+        </DataTable>
       </View>
     </>
   );

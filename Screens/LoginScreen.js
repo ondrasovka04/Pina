@@ -17,7 +17,7 @@ import jsSHA from "jssha";
 import { getCredentials } from "../logins";
 //import { registerIndieID } from "native-notify";
 import Connectivity from '../CheckConn';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { FontAwesome } from '@expo/vector-icons';
 
 const LoginScreen = ({ navigation }) => {
   Connectivity();
@@ -184,7 +184,7 @@ const LoginScreen = ({ navigation }) => {
                   textDecorationLine: "underline",
                 }}
               >
-                <Icon name="android" size={25} /> APLIKACE
+                <FontAwesome name="android" size={25} /> APLIKACE
               </Text>
             </TouchableOpacity>
           </View>

@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
   Text,
 } from "react-native";
-import { Table, Row, Rows } from "react-native-table-component";
+import { DataTable } from "react-native-paper";
 import { getCredentials } from "../logins";
 import DropDownPicker from "react-native-dropdown-picker";
 import Connectivity from "../CheckConn";
@@ -170,16 +170,18 @@ const PrehledProhreskuScreen = ({ navigation }) => {
           />
         </View>
         <View style={{ display: nothingToShow ? "none" : "flex" }}>
-          <Table borderStyle={{ borderWidth: 2, borderColor: "transparent" }}>
-            <Row
-              data={["Název", "Částka"]}
-              style={styles.head}
-              textStyle={styles.text}
-            />
-            <ScrollView>
-              <Rows data={tableData} textStyle={styles.text} />
-            </ScrollView>
-          </Table>
+          <DataTable>
+            <DataTable.Header>
+              <DataTable.Title>Název</DataTable.Title>
+              <DataTable.Title>Částka</DataTable.Title>
+            </DataTable.Header>
+            {tableData.map((row, index) => (
+              <DataTable.Row key={index}>
+                <DataTable.Cell>{row[0]}</DataTable.Cell>
+                <DataTable.Cell>{row[1]}</DataTable.Cell>
+              </DataTable.Row>
+            ))}
+          </DataTable>
         </View>
         <View
           style={{

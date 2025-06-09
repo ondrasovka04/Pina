@@ -1,103 +1,47 @@
-import React, { useRef, useState, useEffect } from "react";
-import {
-  ScrollView,
-  StyleSheet,
-  View,
-  Alert,
-  TouchableOpacity,
-  BackHandler,
-  Text,
-  ActivityIndicator,
-  Button,
-  Dimensions,
-  Platform,
-} from "react-native";
-import { Table, Row, Cell, TableWrapper } from "react-native-table-component";
-import { getCredentials } from "../logins";
+import { useEffect, useState, useRef } from "react";
+import { ScrollView, View, Text, StyleSheet, TouchableOpacity, Dimensions, Button, Platform } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { PieChart } from "react-native-chart-kit";
-import Connectivity from "../CheckConn";
+import { getCredentials } from "../logins";
+import base64 from "base-64";
 
-const PrehledScreen = () => {
-  Connectivity();
-  BackHandler.addEventListener("hardwareBackPress", () => {
-    Alert.alert("Počkej!", "Opravdu chceš opustit aplikaci?", [
-      {
-        text: "Ne",
-        onPress: () => null,
-        style: "cancel",
-      },
-      { text: "Ano", onPress: () => BackHandler.exitApp() },
-    ]);
-    return true;
-  });
-
-  const primaryColor = "dodgerblue";
-  const borderColor = "#C1C0B9";
-  const backgroundColor = "#F7F6E7";
-  var base64 = require("base-64");
-
-  const leftRef = useRef();
-  const rightRef = useRef();
-  const [isLoading, setIsLoading] = useState(true);
-  const [nothingToShow, setNothingToShow] = useState(true);
-  const [rowCount, setRowCount] = useState([]);
-  const [columnCount, setColumnCount] = useState([]);
-  const [tableData, setTableData] = useState([[]]);
-  const [hraci, setHraci] = useState([[]]);
-  const [headers, setHeaders] = useState([]);
-  const [headerWidths, setHeaderWidths] = useState([]);
-
+export default function PrehledTable() {
+  const [data, setData] = useState([]);
+  const [columns, setColumns] = useState([]);
+  const [rows, setRows] = useState([]);
+  const [colWidths, setColWidths] = useState([]);
   const [tymy, setTymy] = useState([]);
-  const [vybranyTym, setVybranyTym] = useState("");
-  const [umelejUpdate, setUmelejUpdate] = useState(0);
-  const [updatePrehledu, setUpdatePrehledu] = useState(0);
   const [sezony, setSezony] = useState([]);
-  const [vybranaSezona, setVybranaSezona] = useState("");
-  const [openSezony, setOpenSezony] = useState(false);
+  const [vybranyTym, setVybranyTym] = useState(null);
+  const [vybranaSezona, setVybranaSezona] = useState(null);
   const [openTymy, setOpenTymy] = useState(false);
+  const [openSezony, setOpenSezony] = useState(false);
 
-  const [editVisible, setEditVisible] = useState(false);
-  const [tableDataDiv, setTableDataDiv] = useState([[]]);
-  const [kolacPocet, setKolacPocet] = useState([]);
-  const [kolacCelkovy, setKolacCelkovy] = useState([]);
-  const [nazevProhresku, setNazevProhresku] = useState("");
-  const [castkaDiv, setCastkaDiv] = useState(0);
-  const [celkemDiv, setCelkemDiv] = useState(0);
-  const [soucetDole, setSoucetDole] = useState(0);
-  const [vyskaHeadru, setVyskaHeadru] = useState(0);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedOffense, setSelectedOffense] = useState("");
+  const [offenseDates, setOffenseDates] = useState([]);
+  const [pieDataUser, setPieDataUser] = useState([]);
+  const [pieDataTotal, setPieDataTotal] = useState([]);
+  const [selectedCost, setSelectedCost] = useState(0);
+  const [selectedTotal, setSelectedTotal] = useState(0);
+
+  const leftScroll = useRef();
+  const rightScroll = useRef();
 
   useEffect(() => {
-    var table = [];
-    global.tym.forEach((element) => {
-      table.push({ label: element.nazev, value: element.nazev });
-    });
-
-    setTymy((old) => {
-      old.splice(0, old.length);
-      for (let i = 0; i < table.length; i++) {
-        old.push(table[i]);
-      }
-      return old;
-    });
-
-    setTymy([...tymy]);
+    if (global.tym) {
+      const seznamTymu = global.tym.map(t => ({ label: t.nazev, value: t.nazev }));
+      setTymy(seznamTymu);
+    }
   }, []);
 
   useEffect(() => {
-    setIsLoading(true);
-    var tymId = 0;
-    global.tym.forEach((element) => {
-      if (element.nazev == vybranyTym) {
-        tymId = element.id;
-      }
-    });
+    if (!vybranyTym) return;
+    const vybrany = global.tym.find(t => t.nazev === vybranyTym);
+    if (!vybrany) return;
 
     fetch(
-      "https://pinaprosek.eu/api/prehled/getSezony.php?id=" +
-      global.id +
-      "&tym=" +
-      tymId,
+      `https://pinaprosek.eu/api/prehled/getSezony.php?id=${global.id}&tym=${vybrany.id}`,
       {
         method: "GET",
         headers: {
@@ -105,559 +49,115 @@ const PrehledScreen = () => {
         },
       }
     )
-      .then((response) => response.json())
-      .then((response) => {
-        var table = [];
-        for (let i = 0; i < response.length; i++) {
-          table.push({ label: response[i].id, value: response[i].id });
-        }
-        setSezony((old) => {
-          old.splice(0, old.length);
-          for (let i = 0; i < table.length; i++) {
-            old.push(table[i]);
-          }
-          return old;
-        });
-
-        setSezony([...table]);
-        setIsLoading(false);
+      .then(res => res.json())
+      .then(json => {
+        const sez = json.map(s => ({ label: s.id, value: s.id }));
+        setSezony(sez);
       });
-  }, [umelejUpdate]);
+  }, [vybranyTym]);
 
+  // Po výběru sezóny načti tabulku
   useEffect(() => {
-    setIsLoading(true);
+    if (!vybranyTym || !vybranaSezona) return;
+    const vybrany = global.tym.find(t => t.nazev === vybranyTym);
+    if (!vybrany) return;
 
-    var tymId = 0;
-    global.tym.forEach((element) => {
-      if (element.nazev == vybranyTym) {
-        tymId = element.id;
+    fetch(
+      `https://pinaprosek.eu/api/prehled/getPrehled.php?tym=${vybrany.id}&sezona=${vybranaSezona}&email=${global.email}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: "Basic " + base64.encode(getCredentials()),
+        },
       }
+    )
+      .then((res) => res.json())
+      .then((json) => {
+        processData(json);
+      });
+  }, [vybranaSezona]);
+
+  const processData = data => {
+    setData(data);
+    const names = [...new Set(data.map(d => d.jmeno))];
+    const offenses = [...new Set(data.map(d => d.nazev))];
+    const colSums = Array(offenses.length).fill(0);
+    const colWidthsTemp = [];
+
+    let totalSum = 0;
+    const table = [];
+
+    offenses.forEach(off => {
+      const calculatedWidth = off.length * 7.5 + 32;
+      const finalWidth = Math.min(Math.max(calculatedWidth, 90), 160);
+      colWidthsTemp.push(finalWidth);
     });
 
-    fetch("https://pinaprosek.eu/api/prehled/getPrehled.php?tym=" + tymId + "&sezona=" + vybranaSezona
-      + "&email=" + global.email, {
-      method: "GET",
-      headers: {
-        Authorization: "Basic " + base64.encode(getCredentials()),
-      },
-    }
-    ).then((response) => {
-      if (response.status == 400) {
-        return "chyba";
-      } else {
-        return response.json();
-      }
-    }).then((response) => {
-      var sloupce = [];
-      var lidi = [];
-      var widths = [];
-      var pocty = [];
-      var castky = [];
-      var nejvetsiVyska = 0;
-      for (let i = 0; i < response.length; i += 1) {
-        var pole = response[i].nazev.split(" ");
-        var novejNazev = "";
-        for (let j = 0; j < pole.length; j++) {
-          if (j % 2 == 1) {
-            novejNazev += pole[j] + "\n";
-          } else {
-            novejNazev += pole[j] + " ";
-          }
-        }
+    colWidthsTemp.push(100);
+    setColWidths(colWidthsTemp);
 
-        novejNazev = novejNazev.substring(0, novejNazev.length - 1);
-
-        if (!sloupce.includes(novejNazev)) {
-          castky.push(response[i].castka);
-          sloupce.push(novejNazev);
-          var pole = novejNazev.split("\n");
-          var nejvetsiSirka = 0;
-          for (let j = 0; j < pole.length; j++) {
-            if (nejvetsiSirka < pole[j].length) {
-              nejvetsiSirka = pole[j].length;
-            }
-          }
-          widths.push(nejvetsiSirka * 12);
-
-          var vyska = novejNazev.split("\n").length * 32;
-          if (vyska > nejvetsiVyska) {
-            nejvetsiVyska = vyska;
-          }
-        }
-        var b = false;
-        lidi.forEach((e) => {
-          if (e.includes(response[i].jmeno)) {
-            b = true;
-          }
-        });
-        if (!b) {
-          const rowData = [];
-          rowData.push(response[i].jmeno);
-          lidi.push(rowData);
-        }
-      }
-
-      setVyskaHeadru(nejvetsiVyska);
-
-      lidi.push(["Součet"]);
-      sloupce.push("Součet");
-      widths.push(75);
-
-      if (response[0] != undefined) {
-        var jmeno = response[0].jmeno;
-      }
-      var soucet = 0;
-      for (let i = 0; i < response.length; i += 1) {
-        if (response[i].jmeno == jmeno) {
-          pocty.push(response[i].Pocet);
-          soucet += response[i].Pocet * response[i].castka;
-          if (i == response.length - 1) {
-            pocty.push(soucet);
-          }
-        } else {
-          jmeno = response[i].jmeno;
-          pocty.push(soucet);
-          soucet = response[i].Pocet * response[i].castka;
-          pocty.push(response[i].Pocet);
-          if (i == response.length - 1) {
-            pocty.push(soucet);
-          }
-        }
-      }
-
-      var pocetSloupcu = sloupce.length;
-      var pocetHracu = lidi.length;
-      var spodniRadek = [];
-      for (let i = 0; i < pocetSloupcu; i++) {
-        soucet = 0;
-        for (let j = 0; j < pocetHracu - 1; j++) {
-          soucet += pocty[i + j * pocetSloupcu];
-        }
-        spodniRadek.push(soucet);
-      }
-
-      spodniRadek.forEach((e) => pocty.push(e));
-
-      var soucet = 0;
-      for (let i = 0; i < spodniRadek.length - 1; i++) {
-        soucet += spodniRadek[i];
-      }
-
-      setSoucetDole(soucet);
-
-      var test = [lidi.length];
-      setRowCount((old) => {
-        old.splice(0, old.length);
-        for (let i = 0; i < test.length; i++) {
-          old.push(test[i]);
-        }
-        return old;
+    names.forEach(n => {
+      const row = { jmeno: n, vals: [], sum: 0 };
+      offenses.forEach((o, i) => {
+        const rec = data.find(d => d.jmeno === n && d.nazev === o);
+        const cnt = rec ? rec.Pocet : 0;
+        const cost = rec ? rec.castka : 0;
+        row.vals.push(cnt);
+        row.sum += cnt * cost;
+        colSums[i] += cnt;
+        totalSum += cnt * cost;
       });
-      setRowCount([...test]);
-
-      var test = [sloupce.length];
-      setColumnCount((old) => {
-        old.splice(0, old.length);
-        for (let i = 0; i < test.length; i++) {
-          old.push(test[i]);
-        }
-        return old;
-      });
-      setColumnCount([...test]);
-
-      setHraci((old) => {
-        old.splice(0, old.length);
-        for (let i = 0; i < lidi.length; i++) {
-          old.push(lidi[i]);
-        }
-        return old;
-      });
-      setHraci([...lidi]);
-
-      setHeaders((old) => {
-        old.splice(0, old.length);
-        for (let i = 0; i < sloupce.length; i++) {
-          old.push(sloupce[i]);
-        }
-        return old;
-      });
-      setHeaders([...sloupce]);
-
-      setHeaderWidths([...widths]);
-
-      var poctyKopie = pocty.slice();
-
-      var table = [];
-      for (let i = 0; i < rowCount; i += 1) {
-        table.push([]);
-        for (let j = 0; j < columnCount; j += 1) {
-          var hodnota = pocty.shift();
-          if (i == 0 && j != columnCount - 1) {
-            table[i][j] = (
-              <TouchableOpacity
-                style={{}}
-                onPress={() => {
-                  var nazev = sloupce[j].replace(/\n/g, " ");
-                  fetch(
-                    "https://pinaprosek.eu/api/prehled/getDatumy.php?nazev=" +
-                    nazev +
-                    "&uzivatel=" +
-                    global.id +
-                    "&sezona=" +
-                    vybranaSezona +
-                    "&tym=" +
-                    tymId,
-                    {
-                      method: "GET",
-                      headers: {
-                        Authorization:
-                          "Basic " + base64.encode(getCredentials()),
-                      },
-                    }
-                  )
-                    .then((response) => response.json())
-                    .then((response) => {
-                      var table = [];
-                      for (let i = 0; i < response.length; i++) {
-                        table.push([]);
-                        var d = new Date(response[i].Datum.split(" ")[0]);
-                        var text = d.getDate() + "." + (d.getMonth() + 1) + "." + d.getFullYear();
-                        table[i][0] = text;
-                      }
-
-                      if (table.length == 0) {
-                        table.push(["Žádné datumy k dispozici"]);
-                      }
-
-                      setTableDataDiv((old) => {
-                        old.splice(0, old.length);
-                        for (let i = 0; i < table.length; i++) {
-                          old.push(table[i]);
-                        }
-                        return old;
-                      });
-                      setTableDataDiv([...table]);
-
-                      table = [
-                        {
-                          name: "tým",
-                          population: spodniRadek[j] - poctyKopie[j],
-                          color: "#0000FF",
-                          legendFontColor: "#000000",
-                          legendFontSize: 17,
-                        },
-                        {
-                          name: "já",
-                          population: poctyKopie[j],
-                          color: "#FF0000",
-                          legendFontColor: "#000000",
-                          legendFontSize: 17,
-                        },
-                      ];
-
-                      setKolacPocet((old) => {
-                        old.splice(0, old.length);
-                        for (let i = 0; i < table.length; i++) {
-                          old.push(table[i]);
-                        }
-                        return old;
-                      });
-                      setKolacPocet([...table]);
-
-                      table = [];
-
-                      for (let i = 0; i < sloupce.length - 1; i++) {
-                        var randomColor = Math.floor(Math.random() * 16777215)
-                          .toString(16)
-                          .padStart(6, "0");
-                        table.push({
-                          name: sloupce[i],
-                          population: spodniRadek[i],
-                          color: "#" + randomColor,
-                          legendFontColor: "#000000",
-                          legendFontSize: Platform.OS == "web" ? 20 : 12,
-                        });
-                      }
-                      table.sort((a, b) => ((a["population"] < b["population"]) ? -1 : (a["population"] > b["population"]) ? 1 : 0) * -1);
-
-                      setKolacCelkovy((old) => {
-                        old.splice(0, old.length);
-                        for (let i = 0; i < table.length; i++) {
-                          old.push(table[i]);
-                        }
-                        return old;
-                      });
-                      setKolacCelkovy([...table]);
-
-                      setNazevProhresku(sloupce[j].toUpperCase());
-
-                      setCastkaDiv(castky[j]);
-
-                      setCelkemDiv(castky[j] * poctyKopie[j]);
-
-                      setEditVisible(true);
-                    });
-                }}
-              >
-                <Text
-                  style={{
-                    textAlign: "center",
-                    fontSize: 20,
-                    fontWeight: "bold",
-                    color: "red",
-                  }}
-                >
-                  {hodnota}
-                </Text>
-              </TouchableOpacity>
-            );
-          } else if (i == rowCount - 1 || j == columnCount - 1) {
-            table[i][j] = (
-              <Text
-                style={{
-                  textAlign: "center",
-                  fontSize: 20,
-                  fontWeight: "bold",
-                  color: 'white'
-                }}
-              >
-                {hodnota}
-              </Text>
-            );
-          } else {
-            table[i][j] = (
-              <Text
-                style={{
-                  textAlign: "center",
-                  fontSize: 20,
-                  fontWeight: "bold",
-                }}
-              >
-                {hodnota}
-              </Text>
-            );
-          }
-        }
-      }
-      setTableData((old) => {
-        old.splice(0, old.length);
-        for (let i = 0; i < table.length; i++) {
-          old.push(table[i]);
-        }
-        return old;
-      });
-      setTableData([...table]);
-
-      if (updatePrehledu != 0) {
-        setNothingToShow(false);
-      }
-      setIsLoading(false);
+      table.push(row);
     });
-  }, [updatePrehledu]);
+
+    table.push({ jmeno: "Součet", vals: colSums, sum: totalSum });
+    setRows(table);
+    setColumns([...offenses, "Součet"]);
+  };
+
+  const openModal = (nazev, index, cost) => {
+    const tym = global.tym.find(t => t.nazev === vybranyTym);
+    fetch(
+      `https://pinaprosek.eu/api/prehled/getDatumy.php?nazev=${nazev}&uzivatel=${global.id}&sezona=${vybranaSezona}&tym=${tym.id}`,
+      { headers: { Authorization: "Basic " + base64.encode(getCredentials()) } }
+    )
+      .then(res => res.json())
+      .then(data => {
+        const daty = data.length > 0 ? data.map(d => [new Date(d.Datum).toLocaleDateString()]) : [["Žádné datumy"]];
+        setOffenseDates(daty);
+
+        const userCount = rows[0].vals[index];
+        const teamCount = rows[rows.length - 1].vals[index];
+
+        setPieDataUser([
+          { name: "já", population: userCount, color: "red", legendFontColor: "#000", legendFontSize: 17 },
+          { name: "tým", population: teamCount - userCount, color: "blue", legendFontColor: "#000", legendFontSize: 17 },
+        ]);
+
+        const totalPie = columns.slice(0, -1).map((col, i) => ({
+          name: col,
+          population: rows[rows.length - 1].vals[i],
+          color: "#" + Math.floor(Math.random() * 16777215).toString(16).padStart(6, "0"),
+          legendFontColor: "#000",
+          legendFontSize: 17,
+        }));
+
+        const sortedPie = totalPie.sort((a, b) => b.population - a.population);
+
+        setPieDataTotal(sortedPie);
+        setSelectedOffense(nazev);
+        setSelectedCost(cost);
+        setSelectedTotal(cost * userCount);
+        setModalVisible(true);
+      });
+  };
 
   return (
-    <View style={{ backgroundColor: "#fff", width: "100%", height: "100%" }}>
-      <View
-        style={{
-          display: editVisible ? "flex" : "none",
-          flex: 1,
-          position: "absolute",
-          zIndex: 2,
-          height: "100%",
-          width: "100%",
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: "#505050b8",
-        }}
-      >
-        <ScrollView
-          style={{
-            position: "absolute",
-            zIndex: 3,
-            width: "90%",
-            height: "80%",
-            borderWidth: 5,
-            borderRadius: 20,
-            backgroundColor: "#fff",
-          }}
-        >
-          <View
-            style={{
-              margin: 20,
-            }}
-          >
-            <Text style={{ fontSize: 25, fontWeight: "bold" }}>
-              {nazevProhresku}
-            </Text>
-          </View>
-          <View
-            style={{
-              margin: 20,
-            }}
-          >
-            <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-              Cena za prohřešek: {castkaDiv} Kč
-            </Text>
-            <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-              Celkem: {celkemDiv} Kč
-            </Text>
-          </View>
-
-          <View
-            style={{
-              flexDirection:
-                Platform.OS == "web" && Dimensions.get("screen").width > 1000
-                  ? "row"
-                  : "column",
-            }}
-          >
-            <View
-              style={{
-                marginTop: 20,
-                marginLeft: 20,
-              }}
-            >
-              <View
-                style={{
-                  maxHeight: Platform.OS == "web" ? 450 : 250,
-                  backgroundColor: "#fff",
-                }}
-              >
-                <Table borderStyle={{ borderWidth: 1, borderColor }}>
-                  <Row
-                    data={["Datum připsání prohřešku"]}
-                    widthArr={[300]}
-                    style={styles.head}
-                    textStyle={{ ...styles.text, color: "white" }}
-                  />
-                </Table>
-                <ScrollView nestedScrollEnabled={true}>
-                  <Table borderStyle={{ borderWidth: 1, borderColor }}>
-                    {tableDataDiv.map((rowData, index) => (
-                      <Row
-                        key={index}
-                        data={rowData}
-                        widthArr={[300]}
-                        style={
-                          index % 2
-                            ? styles.row
-                            : [{ backgroundColor }, styles.row]
-                        }
-                        textStyle={styles.text}
-                      />
-                    ))}
-                  </Table>
-                </ScrollView>
-              </View>
-            </View>
-            <View style={{ flexDirection: "column" }}>
-              <View>
-                <PieChart
-                  data={kolacPocet}
-                  width={
-                    Platform.OS == "web"
-                      ? (Dimensions.get("screen").width > 900
-                        ? 600
-                        : Dimensions.get("window").width / 1.2) / 1
-                      : 300
-                  }
-                  height={Platform.OS == "web" ? 200 : 100}
-                  center={[15, 0]}
-                  chartConfig={{
-                    color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-                  }}
-                  accessor="population"
-                  backgroundColor="transparent"
-                  style={{ fontFamily: "Segoe UI" }}
-                />
-              </View>
-              <View
-                style={{
-                  flexDirection:
-                    Platform.OS == "web"
-                      ? Dimensions.get("screen").width < 750
-                        ? "column"
-                        : "row"
-                      : "column",
-                  maxWidth: Dimensions.get("screen").width / 1.3,
-                }}
-              >
-                <PieChart
-                  data={kolacCelkovy}
-                  width={Platform.OS == "web" ? 350 : 300}
-                  height={Platform.OS == "web" ? 350 : 150}
-                  chartConfig={{
-                    color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-                    strokeWidth: 20,
-                  }}
-                  hasLegend={false}
-                  accessor="population"
-                  backgroundColor="transparent"
-                  center={Platform.OS == "web" ? [70, 0] : [0, 0]}
-                />
-                <ScrollView
-                  nestedScrollEnabled={true}
-                  style={{
-                    maxHeight: 200,
-                    marginTop: Dimensions.get("screen").width < 750 ? 0 : 50,
-                  }}
-                >
-                  {kolacCelkovy.map((item) => {
-                    var pocet = Math.round(
-                      (item.population / soucetDole) * 100
-                    );
-                    if (pocet == 0) {
-                      pocet = "<1";
-                    }
-                    if (item.population != 0) {
-                      return (
-                        <View style={styles.legendLog}>
-                          <View
-                            style={[
-                              styles.colorBox,
-                              { backgroundColor: item.color },
-                            ]}
-                          ></View>
-                          <Text style={styles.legendText}>
-                            {pocet}% {item.name.replace(/\n/g, " ")}
-                          </Text>
-                        </View>
-                      );
-                    }
-                  })}
-                </ScrollView>
-              </View>
-            </View>
-          </View>
-          <View style={{ height: 50, width: 100, margin: 20 }}>
-            <Button title="ZAVŘÍT" onPress={() => setEditVisible(false)} />
-          </View>
-        </ScrollView>
-      </View>
-
-      <View
-        style={{
-          display: isLoading ? "flex" : "none",
-          flex: 1,
-          backgroundColor: "#fff",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <ActivityIndicator size="large" />
-      </View>
-
-      <View
-        style={{
-          display: isLoading ? "none" : "flex",
-          height: 150,
-          marginLeft: 50,
-          marginTop: 50,
-          backgroundColor: "#fff",
-        }}
-      >
-        <View style={[styles.DropDownPickerContainer, { zIndex: 20000 }]}>
-          <Text style={styles.DropDownPickerLable}>Týmy:</Text>
+    <View style={{ flex: 1, paddingTop: 10 }}>
+      {/* Výběr týmů a sezón */}
+      <View style={{ flexDirection: "row", marginLeft: 20, marginBottom: 20, zIndex: 1000 }}>
+        <View style={{ width: 200, marginRight: 10, zIndex: openTymy ? 2000 : 1000 }}>
+          <Text style={{ marginBottom: 5 }}>Tým:</Text>
           <DropDownPicker
             open={openTymy}
             value={vybranyTym}
@@ -665,20 +165,14 @@ const PrehledScreen = () => {
             setOpen={setOpenTymy}
             setValue={setVybranyTym}
             setItems={setTymy}
-            placeholder="Vyberte"
-            onSelectItem={(item) => {
-              setUmelejUpdate(() => umelejUpdate + 1);
-              setVybranaSezona("");
-              setNothingToShow(true);
-            }}
-            style={{ width: 200, marginBottom: 10 }}
-            containerStyle={{
-              width: 200,
-            }}
+            placeholder="Vyberte tým"
+            zIndex={3000}
+            zIndexInverse={1000}
           />
         </View>
-        <View style={styles.DropDownPickerContainer}>
-          <Text style={styles.DropDownPickerLable}>Sezóny:</Text>
+
+        <View style={{ width: 200, zIndex: openSezony ? 2000 : 500 }}>
+          <Text style={{ marginBottom: 5 }}>Sezóna:</Text>
           <DropDownPicker
             open={openSezony}
             value={vybranaSezona}
@@ -686,214 +180,307 @@ const PrehledScreen = () => {
             setOpen={setOpenSezony}
             setValue={setVybranaSezona}
             setItems={setSezony}
-            placeholder="Vyberte"
-            onSelectItem={(item) => {
-              setUpdatePrehledu(() => updatePrehledu + 1);
-            }}
-            style={{ width: 200 }}
-            containerStyle={{
-              width: 200
-            }}
+            placeholder="Vyberte sezónu"
+            zIndex={2000}
+            zIndexInverse={500}
           />
         </View>
       </View>
 
-      <View
-        style={{
-          display: nothingToShow ? "none" : "flex",
-          flexDirection: "row",
-          backgroundColor: "#eee",
-          marginBottom: Platform.OS == 'web' ? 0 : 200,
-          zIndex: -11,
-        }}
-      >
-        <View
-          style={{
-            width: 100,
-            backgroundColor: "yellow",
-            borderRightWidth: 1,
-            borderRightColor: borderColor,
-          }}
-        >
-          <View
-            style={{
-              height: vyskaHeadru,
-              backgroundColor: primaryColor,
-            }}
-          ></View>
-          <ScrollView
-            ref={leftRef}
-            style={{
-              flex: 1,
-              backgroundColor: "white",
-            }}
-            scrollEnabled={false}
-            showsVerticalScrollIndicator={false}
-          >
-            <Table
-              borderStyle={{
-                borderWidth: 1,
-                borderColor,
-              }}
-              style={{ marginBottom: 25 }}
+      {/* Tabulka */}
+      {rows.length > 0 && (
+        <View style={{ flex: 1, flexDirection: "row" }}>
+          <View>
+            <View style={[styles.headerCell, styles.fixedCell, { height: 60 }]}>
+              <Text style={styles.headerText}></Text>
+            </View>
+            <ScrollView
+              ref={leftScroll}
+              scrollEnabled={false}
+              style={{ maxHeight: 600 }}
             >
-              {hraci.map((rowData, index) => {
+              {rows.map((r, i) => (
+                <View
+                  key={i}
+                  style={[
+                    styles.cell,
+                    styles.fixedCell,
+                    r.jmeno === "Součet" && styles.totalCell,
+                    { height: 50 },
+                  ]}
+                >
+                  <Text style={styles.nameText}>{r.jmeno}</Text>
+                </View>
+              ))}
+              <View style={{ height: 15 }} />
+            </ScrollView>
+          </View>
 
-                if (rowData == "Součet") {
-                  return (
-                    <Row
-                      key={index}
-                      data={rowData}
-                      widthArr={[100]}
-                      style={[styles.row, { backgroundColor: primaryColor }]}
-
-                      textStyle={{
-                        fontSize: 20,
-                        textAlign: "center",
-                        color: 'white'
-                      }}
-                    />
-                  );
-                } else {
-                  return (
-                    <Row
-                      key={index}
-                      data={rowData}
-                      widthArr={[100]}
-                      style={
-                        index % 2 ? styles.row : [{ backgroundColor }, styles.row]
-                      }
-                      textStyle={styles.text}
-                    />
-                  );
-                }
-              })}
-            </Table>
-          </ScrollView>
-        </View>
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: "white",
-          }}
-        >
-          <ScrollView horizontal={true} bounces={false}>
+          <ScrollView horizontal>
             <View>
-              <Table borderStyle={{ borderWidth: 1, borderColor }}>
-                <Row
-                  data={headers}
-                  widthArr={headerWidths}
-                  style={{
-                    height: vyskaHeadru,
-                    backgroundColor: primaryColor,
-                  }}
-                  textStyle={{ ...styles.text, color: "white" }}
-                />
-              </Table>
+              <View style={styles.row}>
+                {columns.map((col, i) => (
+                  <TouchableOpacity
+                    key={i}
+                    onPress={() => {
+                      if (col !== "Součet") {
+                        const d = data.find(d => d.jmeno === rows[0].jmeno && d.nazev === col);
+                        openModal(col, i, d.castka);
+                      }
+                    }}
+                    activeOpacity={0.7}
+                    style={[
+                      styles.headerCell,
+                      { width: colWidths[i], height: 60 },
+                    ]}
+                  >
+                    <Text
+                      style={styles.headerText}
+                      numberOfLines={3}
+                      adjustsFontSizeToFit
+                    >
+                      {col}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+
               <ScrollView
-                ref={rightRef}
-                style={styles.dataWrapper}
-                scrollEventThrottle={16}
-                bounces={false}
-                onScroll={(e) => {
-                  const { y } = e.nativeEvent.contentOffset;
-                  leftRef.current?.scrollTo({ y, animated: false });
+                style={{ maxHeight: 600 }}
+                ref={rightScroll}
+                onScroll={e => {
+                  leftScroll.current?.scrollTo({
+                    y: e.nativeEvent.contentOffset.y,
+                    animated: false,
+                  });
                 }}
+                scrollEventThrottle={16}
               >
-                <Table borderStyle={{ borderWidth: 1, borderColor }}>
-
-                  {
-                    tableData.map((rowData, index) => (
-                      <TableWrapper key={index} style={{ flexDirection: 'row', backgroundColor: '#FFF1C1' }}>
-                        {
-                          rowData.map((cellData, cellIndex) => {
-                            if (index == rowCount - 1 || cellIndex == columnCount - 1) {
-                              return (
-                                <Cell key={cellIndex} height={54} width={headerWidths[cellIndex]} data={cellData} textStyle={{ fontSize: 20, textAlign: 'center' }} style={{ backgroundColor: primaryColor }} />
-                              );
-                            } else {
-                              return (
-                                <Cell key={cellIndex} height={54} width={headerWidths[cellIndex]} data={cellData} textStyle={{ fontSize: 20, textAlign: 'center' }} style={{ backgroundColor: index % 2 == 0 ? backgroundColor : '#fff' }} />
-                              );
-
-                            }
-                          })
-                        }
-                      </TableWrapper>
-                    ))
-                  }
-                </Table>
+                {rows.map((r, i) => (
+                  <View key={i} style={styles.row}>
+                    {r.vals.map((v, j) => (
+                      <View
+                        key={j}
+                        style={[
+                          styles.cell,
+                          { width: colWidths[j], height: 50 },
+                          r.jmeno === "Součet" && styles.totalCell,
+                        ]}
+                      >
+                        <Text style={[styles.cellText, r.jmeno === "Součet" && { fontWeight: "bold" }]}>{v}</Text>
+                      </View>
+                    ))}
+                    <View
+                      style={[
+                        styles.cell,
+                        { width: colWidths[colWidths.length - 1], height: 50 },
+                        styles.totalCell,
+                      ]}
+                    >
+                      <Text style={[styles.cellText, { fontWeight: "bold" }]}>{r.sum}</Text>
+                    </View>
+                  </View>
+                ))}
               </ScrollView>
             </View>
           </ScrollView>
         </View>
-      </View>
+      )}
 
-      <View
-        style={{
-          display: nothingToShow ? (isLoading ? "none" : "flex") : "none",
-          alignItems: "center",
-          justifyContent: "center",
-          zIndex: -11,
-        }}
-      >
-        <Text style={styles.instructionText}>
-          Nejdříve vyberte tým a sezónu
-        </Text>
-      </View>
+      {modalVisible && (
+        <View style={styles.modalOverlay}>
+          <ScrollView style={styles.modalContent}>
+            <Text style={styles.modalTitle}>{selectedOffense}</Text>
+            <Text style={styles.modalText}>Cena za prohřešek: {selectedCost} Kč</Text>
+            <Text style={styles.modalText}>Celkem: {selectedTotal} Kč</Text>
+
+            <Text style={[styles.modalText, { marginBottom: 10 }]}>Datumy:</Text>
+            <View
+              style={{
+                borderWidth: 1,
+                borderColor: "#ccc",
+                borderRadius: 5,
+                alignSelf: "flex-start",
+                minWidth: 150,
+              }}
+            >
+              {offenseDates.map((d, i) => (
+                <View
+                  key={i}
+                  style={{
+                    paddingVertical: 6,
+                    paddingHorizontal: 10,
+                    borderBottomWidth: i < offenseDates.length - 1 ? 1 : 0,
+                    borderBottomColor: "#eee",
+                    backgroundColor: i % 2 === 0 ? "#f9f9f9" : "#ffffff",
+                  }}
+                >
+                  <Text style={{ fontSize: 16 }}>{d[0]}</Text>
+                </View>
+              ))}
+            </View>
+
+
+            <PieChart
+              data={pieDataUser}
+              width={Dimensions.get("window").width * 0.9}
+              height={200}
+              chartConfig={{ color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})` }}
+              accessor="population"
+              backgroundColor="transparent"
+              center={[15, 0]}
+              style={{ fontFamily: "Segoe UI" }}
+            />
+
+            <View
+              style={{
+                flexDirection:
+                  Platform.OS === "web" && Dimensions.get("screen").width > 1000
+                    ? "row"
+                    : "column",
+                alignItems: "center",
+                justifyContent: "center",
+                marginTop: 30,
+                paddingHorizontal: 10,
+              }}
+            >
+              <PieChart
+                data={pieDataTotal}
+                width={
+                  Platform.OS === "web"
+                    ? Dimensions.get("screen").width > 900
+                      ? 500
+                      : Dimensions.get("window").width * 0.9
+                    : 300
+                }
+                height={300}
+                chartConfig={{
+                  color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                }}
+                accessor="population"
+                backgroundColor="transparent"
+                center={[15, 0]}
+                hasLegend={false}
+              />
+
+              <ScrollView
+                nestedScrollEnabled={true}
+                style={{
+                  maxHeight: 250,
+                  marginLeft: 20,
+                  marginTop: Platform.OS === "web" && Dimensions.get("screen").width > 1000 ? 0 : 20,
+                }}
+              >
+                {pieDataTotal.map((item, index) => {
+                  const total = pieDataTotal.reduce((sum, el) => sum + el.population, 0);
+                  let percentage = Math.round((item.population / total) * 100);
+                  if (percentage === 0 && item.population > 0) percentage = "<1";
+
+                  return (
+                    item.population !== 0 && (
+                      <View key={index} style={styles.legendLog}>
+                        <View
+                          style={[
+                            styles.colorBox,
+                            { backgroundColor: item.color },
+                          ]}
+                        />
+                        <Text style={styles.legendText}>
+                          {percentage}% {item.name.replace(/\n/g, " ")}
+                        </Text>
+                      </View>
+                    )
+                  );
+                })}
+              </ScrollView>
+            </View>
+            <Button title="ZAVŘÍT" onPress={() => setModalVisible(false)} />
+          </ScrollView>
+        </View>
+      )}
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  head: { height: 40, backgroundColor: "dodgerblue" },
-  row: { height: 54 },
-  dataWrapper: { marginTop: -1, paddingBottom: 5 },
-  text: {
-    fontSize: 20,
+  row: { flexDirection: "row" },
+  cell: {
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 4,
+    borderWidth: 1,
+    borderColor: "#ccc",
+  },
+  fixedCell: {
+    backgroundColor: "#eef",
+    minWidth: 120,
+    borderRightWidth: 1,
+  },
+  headerCell: {
+    backgroundColor: "dodgerblue",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 6,
+    borderWidth: 1,
+    borderColor: "#ccc",
+  },
+  headerText: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+    flexShrink: 1,
+    flexWrap: "wrap",
+  },
+  nameText: {
+    fontWeight: "bold",
+    fontSize: 14,
     textAlign: "center",
   },
-  DropDownPickerContainer: {
-    flexDirection: "row",
+  cellText: {
+    fontSize: 14,
+    textAlign: "center",
   },
-  DropDownPickerLable: {
-    fontSize: 17,
-    width: 85,
-    padding: 0,
-    paddingRight: 20,
-    paddingBottom: 0,
-    textAlignVertical: "top",
-    marginTop: 13,
+  totalCell: {
+    backgroundColor: "#d0e0ff",
   },
-  instructionText: {
-    fontSize: 25,
+  modalOverlay: {
+    position: "absolute",
+    zIndex: 1000,
+    backgroundColor: "#505050b8",
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContent: {
+    backgroundColor: "#fff",
+    padding: 20,
+    borderRadius: 10,
+    width: "90%",
+    maxHeight: "85%",
+  },
+  modalTitle: {
+    fontSize: 24,
     fontWeight: "bold",
-    zIndex: -1,
+    marginBottom: 15,
+  },
+  modalText: {
+    fontSize: 18,
+    marginBottom: 10,
   },
   legendLog: {
     flexDirection: "row",
-    display: "flex",
-    justifyContent: "flex-start",
     alignItems: "center",
-    maxWidth:
-      Platform.OS === "web"
-        ? Dimensions.get("screen").width < 1200
-          ? Dimensions.get("screen").width > 750
-            ? Dimensions.get("screen").width - 400
-            : Dimensions.get("screen").width - 850
-          : Dimensions.get("screen").width
-        : 1000,
-    marginLeft: Dimensions.get("screen").width < 750 ? 20 : 0,
+    marginBottom: 6,
   },
   colorBox: {
-    height: 15,
-    width: 15,
-    borderRadius: 45,
-    marginRight: 5,
+    width: 16,
+    height: 16,
+    marginRight: 8,
+    borderRadius: 4,
   },
   legendText: {
-    fontSize: 17,
+    fontSize: 14,
+    color: "#333",
   },
 });
-
-export default PrehledScreen;
