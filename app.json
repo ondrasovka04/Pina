@@ -27,7 +27,7 @@
       },
       "package": "com.ondrasovka2004.Pina",
       "googleServicesFile": "./google-services.json",
-      "versionCode": 15
+      "versionCode": 16
     },
     "web": {
       "favicon": "./assets/ikona.png"
