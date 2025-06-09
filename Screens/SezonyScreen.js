@@ -35,7 +35,7 @@ const SezonyScreen = ({ navigation }) => {
   const NazevSezony = useRef();
   useEffect(() => {
     fetch(
-      "https://pina.trialhosting.cz/api/sezony/getSezony.php?id=" +
+      "https://pinaprosek.eu/api/sezony/getSezony.php?id=" +
       global.admin,
       {
         method: "GET",
@@ -78,7 +78,7 @@ const SezonyScreen = ({ navigation }) => {
       return;
     }
     setIsLoading(true);
-    fetch("https://pina.trialhosting.cz/api/sezony/updateSezony.php", {
+    fetch("https://pinaprosek.eu/api/sezony/updateSezony.php", {
       method: "POST",
       headers: {
         Authorization: "Basic " + base64.encode(getCredentials()),
@@ -118,7 +118,7 @@ const SezonyScreen = ({ navigation }) => {
       return;
     }
     setIsLoading(true);
-    fetch("https://pina.trialhosting.cz/api/sezony/insertSezony.php", {
+    fetch("https://pinaprosek.eu/api/sezony/insertSezony.php", {
       method: "POST",
       headers: {
         Authorization: "Basic " + base64.encode(getCredentials()),
@@ -149,7 +149,7 @@ const SezonyScreen = ({ navigation }) => {
 
   function deleteSezony(id) {
     fetch(
-      "https://pina.trialhosting.cz/api/sezony/deleteSezony.php?id=" +
+      "https://pinaprosek.eu/api/sezony/deleteSezony.php?id=" +
       id +
       "&tym=" +
       global.admin,

@@ -27,7 +27,7 @@ const ZapisScreen = ({ route, navigation }) => {
     const [vyskaHeadru, setVyskaHeadru] = useState(0);
 
     useEffect(() => {
-        fetch("https://pina.trialhosting.cz/api/zapisProhresku/getSeznam.php?id=" + global.admin + "&sezona=" + route.params.sezona, {
+        fetch("https://pinaprosek.eu/api/zapisProhresku/getSeznam.php?id=" + global.admin + "&sezona=" + route.params.sezona, {
             method: 'GET',
             headers: {
                 'Authorization': "Basic " + base64.encode(getCredentials()),
@@ -89,7 +89,7 @@ const ZapisScreen = ({ route, navigation }) => {
 
                 setHeaderWidths([...widths]);
 
-                fetch("https://pina.trialhosting.cz/api/zapisProhresku/getHraci.php?sezona=" + route.params.sezona + "&tym=" + global.admin, {
+                fetch("https://pinaprosek.eu/api/zapisProhresku/getHraci.php?sezona=" + route.params.sezona + "&tym=" + global.admin, {
                     method: 'GET',
                     headers: {
                         'Authorization': "Basic " + base64.encode(getCredentials()),
@@ -186,7 +186,7 @@ const ZapisScreen = ({ route, navigation }) => {
             }
         }
 
-        fetch("https://pina.trialhosting.cz/api/zapisProhresku/insertZapisu.php?sezona=" + route.params.sezona + "&datum=" + route.params.datum + "&tym=" + global.admin, {
+        fetch("https://pinaprosek.eu/api/zapisProhresku/insertZapisu.php?sezona=" + route.params.sezona + "&datum=" + route.params.datum + "&tym=" + global.admin, {
             method: 'POST',
             headers: {
                 'Authorization': "Basic " + base64.encode(getCredentials()),

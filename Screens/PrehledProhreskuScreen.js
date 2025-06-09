@@ -57,7 +57,7 @@ const PrehledProhreskuScreen = ({ navigation }) => {
     });
 
     fetch(
-      "https://pina.trialhosting.cz/api/prehled/getSezony.php?id=" +
+      "https://pinaprosek.eu/api/prehled/getSezony.php?id=" +
       global.id +
       "&tym=" +
       tymId,
@@ -88,7 +88,7 @@ const PrehledProhreskuScreen = ({ navigation }) => {
       }
     });
     fetch(
-      "https://pina.trialhosting.cz/api/seznamProhresku/getSeznam.php?id=" +
+      "https://pinaprosek.eu/api/seznamProhresku/getSeznam.php?id=" +
       tymId +
       "&sezona=" +
       vybranaSezona,

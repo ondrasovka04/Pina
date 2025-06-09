@@ -52,7 +52,7 @@ const HraciScreen = ({ navigation }) => {
   useEffect(() => {
     setIsLoading(true);
     fetch(
-      "https://pina.trialhosting.cz/api/uzivatele/vsechnySezony.php?tym=" +
+      "https://pinaprosek.eu/api/uzivatele/vsechnySezony.php?tym=" +
       global.admin,
       {
         method: "GET",
@@ -76,7 +76,7 @@ const HraciScreen = ({ navigation }) => {
         }
 
         fetch(
-          "https://pina.trialhosting.cz/api/uzivatele/seznamUzivatelu.php?sezona=" +
+          "https://pinaprosek.eu/api/uzivatele/seznamUzivatelu.php?sezona=" +
           vybranaSezona +
           "&tym=" +
           global.admin,
@@ -140,7 +140,7 @@ const HraciScreen = ({ navigation }) => {
       return;
     }
     setIsLoading(true);
-    fetch("https://pina.trialhosting.cz/api/uzivatele/pridatUzivatele.php", {
+    fetch("https://pinaprosek.eu/api/uzivatele/pridatUzivatele.php", {
       method: "POST",
       headers: {
         Authorization: "Basic " + base64.encode(getCredentials()),
@@ -169,7 +169,7 @@ const HraciScreen = ({ navigation }) => {
 
   function deleteHrace(id) {
     fetch(
-      "https://pina.trialhosting.cz/api/uzivatele/pozastavitUzivatele.php?idUzivatel=" +
+      "https://pinaprosek.eu/api/uzivatele/pozastavitUzivatele.php?idUzivatel=" +
       id +
       "&idTym=" +
       global.admin +
@@ -194,7 +194,7 @@ const HraciScreen = ({ navigation }) => {
   function naplnSelecty() {
     setIsLoading(true);
     fetch(
-      "https://pina.trialhosting.cz/api/uzivatele/vsichniHraci.php?tym=" +
+      "https://pinaprosek.eu/api/uzivatele/vsichniHraci.php?tym=" +
       global.admin,
       {
         method: "GET",
@@ -225,7 +225,7 @@ const HraciScreen = ({ navigation }) => {
       return;
     }
 
-    fetch("https://pina.trialhosting.cz/api/uzivatele/uzivatelDoSezony.php", {
+    fetch("https://pinaprosek.eu/api/uzivatele/uzivatelDoSezony.php", {
       method: "POST",
       headers: {
         Authorization: "Basic " + base64.encode(getCredentials()),

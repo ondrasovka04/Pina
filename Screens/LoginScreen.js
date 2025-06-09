@@ -52,7 +52,7 @@ const LoginScreen = ({ navigation }) => {
     shaObj.update(heslo);
     var hashHex = shaObj.getHash("HEX");
 
-    fetch("https://pina.trialhosting.cz/api/login.php", {
+    fetch("https://pinaprosek.eu/api/login.php", {
       method: "POST",
       headers: {
         Authorization: "Basic " + base64.encode(getCredentials()),
@@ -85,7 +85,7 @@ const LoginScreen = ({ navigation }) => {
   }
 
   function isAdmin() {
-    fetch("https://pina.trialhosting.cz/api/isAdmin.php?email=" + uzivjm, {
+    fetch("https://pinaprosek.eu/api/isAdmin.php?email=" + uzivjm, {
       method: "GET",
       headers: {
         Authorization: "Basic " + base64.encode(getCredentials()),

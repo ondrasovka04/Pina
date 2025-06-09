@@ -3,4 +3,4 @@ Ročníkový projekt se zabývá vývojem aplikace Pína, která má za úkol sp
 
 Vyvíjeno v React Native, na Obchodě Play je Android aplikace.
 
-[Odkaz zde](https://pina.trialhosting.cz/)
+[Odkaz zde](https://pinaprosek.eu/)

@@ -47,7 +47,7 @@ const SeznamProhreskuScreen = ({ navigation }) => {
   useEffect(() => {
     setIsLoading(true);
     fetch(
-      "https://pina.trialhosting.cz/api/uzivatele/vsechnySezony.php?tym=" +
+      "https://pinaprosek.eu/api/uzivatele/vsechnySezony.php?tym=" +
       global.admin,
       {
         method: "GET",
@@ -70,7 +70,7 @@ const SeznamProhreskuScreen = ({ navigation }) => {
         }
 
         fetch(
-          "https://pina.trialhosting.cz/api/seznamProhresku/getSeznam.php?id=" +
+          "https://pinaprosek.eu/api/seznamProhresku/getSeznam.php?id=" +
           global.admin +
           "&sezona=" +
           vybranaSezona,
@@ -130,7 +130,7 @@ const SeznamProhreskuScreen = ({ navigation }) => {
       return;
     }
     setIsLoading(true);
-    fetch("https://pina.trialhosting.cz/api/seznamProhresku/updateSeznam.php", {
+    fetch("https://pinaprosek.eu/api/seznamProhresku/updateSeznam.php", {
       method: "POST",
       headers: {
         Authorization: "Basic " + base64.encode(getCredentials()),
@@ -173,7 +173,7 @@ const SeznamProhreskuScreen = ({ navigation }) => {
       return;
     }
     setIsLoading(true);
-    fetch("https://pina.trialhosting.cz/api/seznamProhresku/insertSeznam.php", {
+    fetch("https://pinaprosek.eu/api/seznamProhresku/insertSeznam.php", {
       method: "POST",
       headers: {
         Authorization: "Basic " + base64.encode(getCredentials()),
@@ -203,7 +203,7 @@ const SeznamProhreskuScreen = ({ navigation }) => {
 
   function deleteSezony(id) {
     fetch(
-      "https://pina.trialhosting.cz/api/seznamProhresku/deleteSeznam.php?id=" +
+      "https://pinaprosek.eu/api/seznamProhresku/deleteSeznam.php?id=" +
       id +
       "&idTym=" +
       global.admin,

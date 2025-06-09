@@ -37,7 +37,7 @@ const AdminiScreen = ({ navigation }) => {
 
 
   useEffect(() => {
-    fetch("https://pina.trialhosting.cz/api/admini/vsichniAdmini.php", {
+    fetch("https://pinaprosek.eu/api/admini/vsichniAdmini.php", {
       method: "GET",
       headers: {
         Authorization: "Basic " + base64.encode(getCredentials()),
@@ -60,7 +60,7 @@ const AdminiScreen = ({ navigation }) => {
           return old;
         });
         setTableData([...table]);
-        fetch("https://pina.trialhosting.cz/api/admini/vsichniHraci.php", {
+        fetch("https://pinaprosek.eu/api/admini/vsichniHraci.php", {
           method: "GET",
           headers: {
             Authorization: "Basic " + base64.encode(getCredentials()),
@@ -80,7 +80,7 @@ const AdminiScreen = ({ navigation }) => {
               return old;
             });
             setHraci([...table]);
-            fetch("https://pina.trialhosting.cz/api/admini/vsechnyTymy.php", {
+            fetch("https://pinaprosek.eu/api/admini/vsechnyTymy.php", {
               method: "GET",
               headers: {
                 Authorization: "Basic " + base64.encode(getCredentials()),
@@ -120,7 +120,7 @@ const AdminiScreen = ({ navigation }) => {
     }
     setIsLoading(true);
     fetch(
-      "https://pina.trialhosting.cz/api/admini/prirazeniAdmina.php?tym=" +
+      "https://pinaprosek.eu/api/admini/prirazeniAdmina.php?tym=" +
       vybranyTym +
       "&id=" +
       vybranyHrac,
@@ -143,7 +143,7 @@ const AdminiScreen = ({ navigation }) => {
 
   function deleteAdmina(id) {
     fetch(
-      "https://pina.trialhosting.cz/api/admini/odebraniAdmina.php?id=" + id,
+      "https://pinaprosek.eu/api/admini/odebraniAdmina.php?id=" + id,
       {
         method: "GET",
         headers: {

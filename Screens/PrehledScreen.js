@@ -94,7 +94,7 @@ const PrehledScreen = () => {
     });
 
     fetch(
-      "https://pina.trialhosting.cz/api/prehled/getSezony.php?id=" +
+      "https://pinaprosek.eu/api/prehled/getSezony.php?id=" +
       global.id +
       "&tym=" +
       tymId,
@@ -134,7 +134,7 @@ const PrehledScreen = () => {
       }
     });
 
-    fetch("https://pina.trialhosting.cz/api/prehled/getPrehled.php?tym=" + tymId + "&sezona=" + vybranaSezona
+    fetch("https://pinaprosek.eu/api/prehled/getPrehled.php?tym=" + tymId + "&sezona=" + vybranaSezona
       + "&email=" + global.email, {
       method: "GET",
       headers: {
@@ -299,7 +299,7 @@ const PrehledScreen = () => {
                 onPress={() => {
                   var nazev = sloupce[j].replace(/\n/g, " ");
                   fetch(
-                    "https://pina.trialhosting.cz/api/prehled/getDatumy.php?nazev=" +
+                    "https://pinaprosek.eu/api/prehled/getDatumy.php?nazev=" +
                     nazev +
                     "&uzivatel=" +
                     global.id +

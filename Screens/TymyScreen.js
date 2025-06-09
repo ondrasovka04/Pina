@@ -34,7 +34,7 @@ const TymyScreen = ({ navigation }) => {
 
   const NazevTymu = useRef();
   useEffect(() => {
-    fetch("https://pina.trialhosting.cz/api/tymy/vsechnyTymy.php", {
+    fetch("https://pinaprosek.eu/api/tymy/vsechnyTymy.php", {
       method: "GET",
       headers: {
         Authorization: "Basic " + base64.encode(getCredentials()),
@@ -65,7 +65,7 @@ const TymyScreen = ({ navigation }) => {
   function insertTymu() {
     setIsLoading(true);
     fetch(
-      "https://pina.trialhosting.cz/api/tymy/pridaniTymu.php?nazev=" +
+      "https://pinaprosek.eu/api/tymy/pridaniTymu.php?nazev=" +
       nazevVybrenehoTymu,
       {
         method: "GET",
@@ -87,7 +87,7 @@ const TymyScreen = ({ navigation }) => {
   function updateTymu() {
     setIsLoading(true);
     fetch(
-      "https://pina.trialhosting.cz/api/tymy/updateTymu.php?nazev=" +
+      "https://pinaprosek.eu/api/tymy/updateTymu.php?nazev=" +
       nazevVybrenehoTymu +
       "&id=" +
       idVybrenehoTymu,
@@ -109,7 +109,7 @@ const TymyScreen = ({ navigation }) => {
   }
 
   function deleteTymu(id) {
-    fetch("https://pina.trialhosting.cz/api/tymy/odebraniTymu.php?id=" + id, {
+    fetch("https://pinaprosek.eu/api/tymy/odebraniTymu.php?id=" + id, {
       method: "GET",
       headers: {
         Authorization: "Basic " + base64.encode(getCredentials()),

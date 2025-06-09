@@ -38,7 +38,7 @@ const PrehledZapsanychProhreskuScreen = ({ navigation }) => {
   useEffect(() => {
     setIsLoading(true);
     fetch(
-      "https://pina.trialhosting.cz/api/prehledZapsanychProhresku/getSezony.php?tym=" +
+      "https://pinaprosek.eu/api/prehledZapsanychProhresku/getSezony.php?tym=" +
       global.admin,
       {
         method: "GET",
@@ -61,7 +61,7 @@ const PrehledZapsanychProhreskuScreen = ({ navigation }) => {
         }
 
         fetch(
-          "https://pina.trialhosting.cz/api/prehledZapsanychProhresku/getHraci.php?tym=" +
+          "https://pinaprosek.eu/api/prehledZapsanychProhresku/getHraci.php?tym=" +
           global.admin +
           "&sezona=" +
           vybranaSezona,
@@ -86,7 +86,7 @@ const PrehledZapsanychProhreskuScreen = ({ navigation }) => {
             }
 
             fetch(
-              "https://pina.trialhosting.cz/api/prehledZapsanychProhresku/getProhresky.php?hrac=" +
+              "https://pinaprosek.eu/api/prehledZapsanychProhresku/getProhresky.php?hrac=" +
               vybranyHrac +
               "&tym=" +
               global.admin +
@@ -127,7 +127,7 @@ const PrehledZapsanychProhreskuScreen = ({ navigation }) => {
 
   function deleteSezony(id) {
     fetch(
-      "https://pina.trialhosting.cz/api/prehledZapsanychProhresku/deleteProhresek.php?id=" +
+      "https://pinaprosek.eu/api/prehledZapsanychProhresku/deleteProhresek.php?id=" +
       id,
       {
         method: "GET",

@@ -19,7 +19,7 @@ const ZapisProhreskuScreen = ({ navigation }) => {
 
   useEffect(() => {
     fetch(
-      "https://pina.trialhosting.cz/api/uzivatele/vsechnySezony.php?tym=" +
+      "https://pinaprosek.eu/api/uzivatele/vsechnySezony.php?tym=" +
       global.admin,
       {
         method: "GET",
@@ -108,7 +108,7 @@ const ZapisProhreskuScreen = ({ navigation }) => {
             }
 
             fetch(
-              "https://pina.trialhosting.cz/api/zapisProhresku/jeDatumVSezone.php?tym=" + global.admin + "&datum=" + jsonDate(datum) + "&sezona=" + vybranaSezona,
+              "https://pinaprosek.eu/api/zapisProhresku/jeDatumVSezone.php?tym=" + global.admin + "&datum=" + jsonDate(datum) + "&sezona=" + vybranaSezona,
               {
                 method: "GET",
                 headers: {

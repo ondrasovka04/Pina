@@ -32,7 +32,7 @@ const ZmenaHeslaScreen = ({ navigation }) => {
     const shaObj = new jsSHA("SHA-256", "TEXT");
     shaObj.update(hesloOld);
     var hashHex = shaObj.getHash("HEX");
-    fetch("https://pina.trialhosting.cz/api/login.php", {
+    fetch("https://pinaprosek.eu/api/login.php", {
       method: "POST",
       headers: {
         Authorization: "Basic " + base64.encode(getCredentials()),
@@ -76,7 +76,7 @@ const ZmenaHeslaScreen = ({ navigation }) => {
           var hashHex = shaObj.getHash("HEX");
 
           fetch(
-            "https://pina.trialhosting.cz/api/uzivatele/zmenaHesla.php?react=true",
+            "https://pinaprosek.eu/api/uzivatele/zmenaHesla.php?react=true",
             {
               method: "POST",
               headers: {
