@@ -11,6 +11,8 @@ npm-debug.*
 web-build/
 .vscode/
 .expo-shared/
+libs/
+package-lock.json
 
 # macOS
 .DS_Store
