@@ -126,10 +126,8 @@ const ZapisScreen = ({ route, navigation }) => {
                         setValue(newVal);
 
                         setCount(prev => {
-                            console.log(prev);
                             const updated = [...prev];
                             updated[row][col] = newVal;
-                            console.log("updated count:", updated); // správná hodnota
                             return updated;
                         });
                     }}>
@@ -139,9 +137,12 @@ const ZapisScreen = ({ route, navigation }) => {
                         if (value > 0) {
                             const newVal = value - 1;
                             setValue(newVal);
-                            const updated = [...count];
-                            updated[row][col] = newVal;
-                            setCount(updated);
+
+                            setCount(prev => {
+                                const updated = [...prev];
+                                updated[row][col] = newVal;
+                                return updated;
+                            });
                         }
                     }}>
                         <Text style={styles.counterButton}>-</Text>
