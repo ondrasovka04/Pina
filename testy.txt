@@ -1,7 +1,9 @@
 npx expo export:web
 
-eas build --platform android --profile development
-
-eas build --platform android --profile production
-
 npx expo-doctor
+
+z wsl:
+rsync -av --progress --exclude 'node_modules' "/mnt/d/Ondra/Disk/Školy/Gymnázium Arabská/4.E/rocnikovy_projekt/Moje/Pina/" ./Pina/
+
+eas build --platform android --profile development --local
+eas build --platform android --profile production --local
