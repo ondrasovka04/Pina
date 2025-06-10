@@ -36,7 +36,7 @@ try {
   console.log('Mažu původní složku node_modules...');
   fsExtra.removeSync(projectModulesPath);
 
-  console.log(`Vytvářím odkaz (junction) z ${projectModulesPath} na ${targetModulesPath}`);
+  console.log(`Vytvářím odkaz z ${projectModulesPath} na ${targetModulesPath}`);
   execSync(`mklink /D "${projectModulesPath}" "${targetModulesPath}"`);
 
   console.log('--- Post-install skript úspěšně dokončen! ---');
