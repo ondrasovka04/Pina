@@ -1,4 +1,5 @@
 const fs = require('fs');
+const fsExtra = require('fs-extra');
 const path = require('path');
 const { execSync } = require('child_process');
 
@@ -28,9 +29,12 @@ try {
     console.log('Mažu starou verzi node_modules v cache...');
     execSync(`rmdir /s /q "${targetModulesPath}"`);
   }
-  
-  console.log(`Přesouvám node_modules do ${targetModulesPath}`);
-  fs.renameSync(projectModulesPath, targetModulesPath);
+
+  console.log(`Kopíruji node_modules do ${targetModulesPath}`);
+  fsExtra.copySync(projectModulesPath, targetModulesPath);
+
+  console.log('Mažu původní složku node_modules...');
+  fsExtra.removeSync(projectModulesPath);
 
   console.log(`Vytvářím odkaz (junction) z ${projectModulesPath} na ${targetModulesPath}`);
   execSync(`mklink /D "${projectModulesPath}" "${targetModulesPath}"`);
