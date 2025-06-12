@@ -136,10 +136,10 @@ const LoginScreen = ({ navigation }) => {
       <View
         style={[styles.container, { display: isLoading ? "none" : "flex", height: "100%" }]}
       >
-          <Image
-            style={{ resizeMode: 'stretch', width: 200, height: 200, marginBottom:15 }}
-            source={require('../assets/ikona.png')}
-          />
+        <Image
+          style={{ resizeMode: 'stretch', width: 200, height: 200, marginBottom: 15 }}
+          source={require('../assets/ikona.png')}
+        />
         <View style={styles.greyContainer}>
           <View
             style={styles.inputTextContainer}
@@ -174,7 +174,7 @@ const LoginScreen = ({ navigation }) => {
             />
             <Text style={styles.checkboxText}>Zapamatovat přihlášení</Text>
           </View>
-          <Button title="Přihlásit se" onPress={() => login()}/>
+          <Button title="Přihlásit se" onPress={() => login()} />
           <View style={{ marginTop: 20, display: Platform.OS == 'web' ? 'flex' : 'none' }}>
             <TouchableOpacity onPress={handleLinkPress}>
               <Text
@@ -190,6 +190,30 @@ const LoginScreen = ({ navigation }) => {
           </View>
         </View>
       </View>
+      {Platform.OS === 'web' && (
+        <View style={{ alignItems: 'center', backgroundColor: '#cecece' }}>
+          <Text style={{ fontSize: 12, textAlign: 'center' }}>
+            Tento web hostuje na serverech{' '}
+            <Text
+              style={{ color: '#0066cc', textDecorationLine: 'underline', fontWeight: 'bold' }}
+              onPress={() => Linking.openURL('https://czechia.com')}
+            >
+              CZECHIA.COM
+            </Text>
+          </Text>
+
+          <TouchableOpacity
+            onPress={() => Linking.openURL('https://czechia.com')}
+            accessibilityRole="link"
+            style={{ marginTop: 5 }}
+          >
+            <Image
+              source={require('../assets/logo_czechia.png')}
+              style={{ width: 120, height: 40, resizeMode: 'contain' }}
+            />
+          </TouchableOpacity>
+        </View>
+      )}
     </>
   );
 };
